@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 
 @RestController
 @Api(value = "Root Controller", tags = ["Root"], description = "Root endpoints")
@@ -24,7 +25,7 @@ class RootController @Autowired constructor(
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("Returns \"Hello world\".")
     fun getRoot(): String {
-        return "Hello world"
+        return ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()
     }
 
     @GetMapping("/token")
