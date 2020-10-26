@@ -16,7 +16,7 @@ class ScheduleConfig(
         private val selfWakeClient: SelfWakeProxy
 ) : SchedulingConfigurer {
 
-    @Scheduled(cron = "* */20 * * * *")
+    @Scheduled(cron = "0 */15 * * * *")
     fun selfWake() {
         LOGGER.info("Calling host to wake: ${selfWakeClient.getRoot()}")
     }
