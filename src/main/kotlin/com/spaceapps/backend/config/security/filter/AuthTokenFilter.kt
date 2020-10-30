@@ -34,9 +34,10 @@ class AuthTokenFilter(
                 }
             }
         } catch (e: Exception) {
-            SecurityContextHolder.getContext().authentication = null
+            SecurityContextHolder.getContext().authentication?.isAuthenticated = false
             LOGGER.error(e.localizedMessage)
+        } finally {
+            chain.doFilter(request, response)
         }
-        chain.doFilter(request, response)
     }
 }
