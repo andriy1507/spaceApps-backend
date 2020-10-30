@@ -12,7 +12,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
+import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource
@@ -22,17 +25,19 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource
 class SecurityConfig @Autowired constructor(
         private val userDetailsService: ApplicationUserDetailsService,
         private val passwordEncoder: PasswordEncoder,
-        private val authTokenProvider: AuthTokenProvider
+        private val authTokenFilter: AuthTokenFilter
 ) : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
         with(http) {
             cors().and().csrf().disable()
-                    .addFilter(AuthTokenFilter(authenticationManager(), userDetailsService, authTokenProvider))
                     .authorizeRequests()
                     .anyRequest()
                     .permitAll()
-
+                    .and()
+                    .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
+                    .sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
         }
     }
 

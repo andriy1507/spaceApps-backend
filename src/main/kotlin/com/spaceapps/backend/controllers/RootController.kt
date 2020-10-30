@@ -29,8 +29,8 @@ class RootController @Autowired constructor(
     }
 
     @GetMapping("/token")
-    fun getUserToken(name: String, pass: String): String {
-        val user = ApplicationUser(1, name, pass)
+    fun getUserToken(userName: String, password: String): String {
+        val user = ApplicationUser(1, userName, password)
         service.saveUser(user)
         return authTokenProvider.getAuthToken(user)
     }
