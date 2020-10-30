@@ -1,10 +1,11 @@
 package com.spaceapps.backend.repositories
 
 import com.spaceapps.backend.model.ApplicationUser
+import org.springframework.data.repository.CrudRepository
+import org.springframework.stereotype.Repository
 
-interface ApplicationUserRepository {
-
-    fun saveUser(user: ApplicationUser)
+@Repository
+interface ApplicationUserRepository:CrudRepository<ApplicationUser, Int> {
 
     fun getByUserName(name: String): ApplicationUser?
 }

@@ -16,7 +16,7 @@ class ApplicationUserDetailsServiceImpl(
 ) : ApplicationUserDetailsService {
 
     override fun saveUser(user: ApplicationUser) {
-        userRepository.saveUser(user.copy(password = passwordEncoder.encode(user.password)))
+        userRepository.save(user.copy(password = passwordEncoder.encode(user.password)))
     }
 
     override fun loadUserByUsername(username: String?): UserDetails {
