@@ -30,7 +30,7 @@ class AuthTokenFilter @Autowired constructor(
             if (!header.isNullOrBlank()) {
                 val userName = authTokenProvider.getUserName(header.substringAfter(TOKEN_PREFIX))
                 userDetailsService.loadUserByUsername(userName)?.let { userDetails ->
-                    SecurityContextHolder.getContext().authentication = UsernamePasswordAuthenticationToken(userDetails.username, userDetails.password, null)
+                    SecurityContextHolder.getContext().authentication = UsernamePasswordAuthenticationToken(userDetails, userDetails.password, null)
                 }
             }
         } catch (e: Exception) {
