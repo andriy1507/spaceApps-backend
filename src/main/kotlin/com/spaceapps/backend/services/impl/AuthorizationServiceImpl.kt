@@ -1,10 +1,11 @@
 package com.spaceapps.backend.services.impl
 
 import com.spaceapps.backend.config.security.token.AuthTokenProvider
-import com.spaceapps.backend.model.ApplicationUser
-import com.spaceapps.backend.model.UsernameExistsException
+import com.spaceapps.backend.model.dao.ApplicationUser
+import com.spaceapps.backend.model.exceptions.UsernameExistsException
 import com.spaceapps.backend.repositories.ApplicationUserRepository
 import com.spaceapps.backend.services.AuthorizationService
+import com.spaceapps.backend.utils.LOGGER
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
@@ -19,7 +20,7 @@ class AuthorizationServiceImpl constructor(
 
     override fun signInUserNamePassword(userName: String, password: String): String {
         return userRepository.getByUserName(userName)?.let { user ->
-            if (passwordEncoder.matches(password, user.password)) {
+            if (passwordEncoder.matches(password, user.pass)) {
                 tokenProvider.getAuthToken(user)
             } else {
                 throw CredentialException("Wrong password for user $userName")
@@ -29,9 +30,11 @@ class AuthorizationServiceImpl constructor(
 
     override fun signUpUserNamePassword(userName: String, password: String): String {
         return try {
-            val user = ApplicationUser(userName = userName, password = passwordEncoder.encode(password))
+            val user = ApplicationUser(userName = userName, pass = passwordEncoder.encode(password))
             tokenProvider.getAuthToken(userRepository.save(user))
         } catch (e: Exception) {
+            LOGGER.error(e.localizedMessage)
+            e.printStackTrace()
             throw UsernameExistsException(userName)
         }
     }

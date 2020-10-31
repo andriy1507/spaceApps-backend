@@ -1,6 +1,6 @@
 package com.spaceapps.backend.services
 
-import com.spaceapps.backend.model.ApplicationUser
+import com.spaceapps.backend.model.dao.ApplicationUser
 import org.springframework.security.core.userdetails.UserDetailsService
 
 interface ApplicationUserDetailsService : UserDetailsService {

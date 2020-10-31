@@ -1,9 +1,8 @@
 package com.spaceapps.backend.services.impl
 
-import com.spaceapps.backend.model.ApplicationUser
+import com.spaceapps.backend.model.dao.ApplicationUser
 import com.spaceapps.backend.repositories.ApplicationUserRepository
 import com.spaceapps.backend.services.ApplicationUserDetailsService
-import org.springframework.security.core.userdetails.User
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -16,12 +15,10 @@ class ApplicationUserDetailsServiceImpl(
 ) : ApplicationUserDetailsService {
 
     override fun saveUser(user: ApplicationUser) {
-        userRepository.save(user.copy(password = passwordEncoder.encode(user.password)))
+        userRepository.save(user.copy(pass = passwordEncoder.encode(user.pass)))
     }
 
     override fun loadUserByUsername(username: String?): UserDetails {
-        return userRepository.getByUserName(username.orEmpty())?.let { user ->
-            User(user.userName, user.password, mutableListOf())
-        } ?: throw UsernameNotFoundException("User with username $username not found")
+        return userRepository.getByUserName(username.orEmpty()) ?: throw UsernameNotFoundException("User with username $username not found")
     }
 }

@@ -1,6 +1,7 @@
-package com.spaceapps.backend.model
+package com.spaceapps.backend.model.dao
 
 import com.google.gson.annotations.SerializedName
+import org.springframework.security.core.userdetails.User
 import javax.persistence.*
 
 @Entity
@@ -15,5 +16,5 @@ data class ApplicationUser(
         val userName: String = "root",
         @Column
         @SerializedName("password")
-        val password: String = "root"
-)
+        val pass: String = "root"
+): User(userName, pass, emptyList())

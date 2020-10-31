@@ -1,4 +1,4 @@
-package com.spaceapps.backend.model
+package com.spaceapps.backend.model.exceptions
 
 import org.springframework.security.core.AuthenticationException
 

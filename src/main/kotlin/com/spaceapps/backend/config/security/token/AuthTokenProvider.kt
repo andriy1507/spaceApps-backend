@@ -1,6 +1,6 @@
 package com.spaceapps.backend.config.security.token
 
-import com.spaceapps.backend.model.ApplicationUser
+import com.spaceapps.backend.model.dao.ApplicationUser
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
 import org.joda.time.LocalDateTime

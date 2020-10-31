@@ -1,6 +1,6 @@
 package com.spaceapps.backend.repositories
 
-import com.spaceapps.backend.model.ApplicationUser
+import com.spaceapps.backend.model.dao.ApplicationUser
 import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 

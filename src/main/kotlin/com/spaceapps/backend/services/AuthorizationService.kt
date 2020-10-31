@@ -1,6 +1,6 @@
 package com.spaceapps.backend.services
 
-import com.spaceapps.backend.model.UsernameExistsException
+import com.spaceapps.backend.model.exceptions.UsernameExistsException
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import kotlin.jvm.Throws
 

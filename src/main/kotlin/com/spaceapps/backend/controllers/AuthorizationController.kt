@@ -1,10 +1,9 @@
 package com.spaceapps.backend.controllers
 
-import com.spaceapps.backend.model.UsernameExistsException
+import com.spaceapps.backend.model.exceptions.UsernameExistsException
 import com.spaceapps.backend.services.AuthorizationService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
-import java.sql.SQLException
 
 @RestController
 @RequestMapping("authorization")
