@@ -1,7 +1,6 @@
 package com.spaceapps.backend.config.security
 
 import com.spaceapps.backend.config.security.filter.AuthTokenFilter
-import com.spaceapps.backend.config.security.token.AuthTokenProvider
 import com.spaceapps.backend.services.ApplicationUserDetailsService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
@@ -13,7 +12,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
-import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter
 import org.springframework.web.cors.CorsConfiguration
@@ -32,8 +30,17 @@ class SecurityConfig @Autowired constructor(
         with(http) {
             cors().and().csrf().disable()
                     .authorizeRequests()
-                    .anyRequest()
+                    .antMatchers(
+                            "/authorization/**",
+                            "/swagger-ui/**",
+                            "/swagger-resources/**",
+                            "/swagger-ui.html",
+                            "/v2/api-docs",
+                            "/webjars/**"
+                    )
                     .permitAll()
+                    .anyRequest()
+                    .authenticated()
                     .and()
                     .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
                     .sessionManagement()

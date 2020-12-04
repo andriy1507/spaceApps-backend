@@ -27,9 +27,12 @@ class AuthTokenFilter @Autowired constructor(
         val header = request.getHeader(TOKEN_HEADER)
         try {
             if (!header.isNullOrBlank()) {
-                val userName = authTokenProvider.getUserName(header.substringAfter(TOKEN_PREFIX))
-                userDetailsService.loadUserByUsername(userName)?.let { userDetails ->
-                    SecurityContextHolder.getContext().authentication = UsernamePasswordAuthenticationToken(userDetails, userDetails.password, null)
+                val token = header.substringAfter(TOKEN_PREFIX)
+                if (authTokenProvider.isAuthTokenValid(token)) {
+                    val userName = authTokenProvider.getUserName(token)
+                    userDetailsService.loadUserByUsername(userName)?.let { userDetails ->
+                        SecurityContextHolder.getContext().authentication = UsernamePasswordAuthenticationToken(userDetails, userDetails.password, null)
+                    }
                 }
             }
         } catch (e: Exception) {

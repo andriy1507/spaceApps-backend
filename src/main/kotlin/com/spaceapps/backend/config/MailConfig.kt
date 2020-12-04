@@ -9,5 +9,7 @@ import org.springframework.mail.javamail.JavaMailSenderImpl
 class MailConfig {
 
     @Bean
-    fun mailSender(): JavaMailSender = JavaMailSenderImpl()
+    fun mailSender(): JavaMailSender {
+        return JavaMailSenderImpl()
+    }
 }

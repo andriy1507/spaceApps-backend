@@ -1,20 +1,22 @@
 package com.spaceapps.backend.model.dao
 
-import com.google.gson.annotations.SerializedName
+import com.spaceapps.backend.model.dto.ApplicationUserDto
 import org.springframework.security.core.userdetails.User
-import javax.persistence.*
+import javax.persistence.Column
+import javax.persistence.Entity
+import javax.persistence.Id
+import javax.persistence.Table
 
 @Entity
 @Table
 data class ApplicationUser(
         @Id
         @Column
-        @GeneratedValue(strategy = GenerationType.AUTO)
         var id: Int = 0,
         @Column(unique = true)
-        @SerializedName("userName")
         val userName: String = "root",
         @Column
-        @SerializedName("password")
         val pass: String = "root"
-): User(userName, pass, emptyList())
+) : User(userName, pass, emptyList()) {
+    fun toDto() = ApplicationUserDto(id, userName, pass)
+}
