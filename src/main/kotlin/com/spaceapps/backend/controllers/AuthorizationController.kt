@@ -3,11 +3,15 @@ package com.spaceapps.backend.controllers
 import com.spaceapps.backend.model.exceptions.UsernameExistsException
 import com.spaceapps.backend.repositories.ApplicationUserRepository
 import com.spaceapps.backend.services.AuthorizationService
+import io.swagger.annotations.Api
+import io.swagger.annotations.ApiOperation
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("authorization")
+@Api(value = "Authorization controller",tags = ["Authorization"], description = "Authorization management")
 class AuthorizationController constructor(
         private val authorizationService: AuthorizationService,
         private val userRepository: ApplicationUserRepository
@@ -26,6 +30,8 @@ class AuthorizationController constructor(
 //    }
 
     @GetMapping("/sign-in")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation("Returns access and refresh tokens")
     fun singInWithUserNameAndPassword(
             @RequestParam("userName") userName: String,
             @RequestParam("password") password: String
@@ -38,6 +44,8 @@ class AuthorizationController constructor(
     }
 
     @PostMapping("/sign-up")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation("Creates new user and returns access and refresh tokens")
     fun signUpWithUserNameAndPassword(
             @RequestParam("userName") userName: String,
             @RequestParam("password") password: String
@@ -51,6 +59,8 @@ class AuthorizationController constructor(
     }
 
     @GetMapping("/refresh-token")
+    @ResponseStatus(HttpStatus.OK)
+    @ApiOperation("Returns new access and refresh tokens")
     fun refreshToken(@RequestParam("refresh_token") token: String): ResponseEntity<*> {
         return try {
             ResponseEntity.ok(authorizationService.refreshToken(token))

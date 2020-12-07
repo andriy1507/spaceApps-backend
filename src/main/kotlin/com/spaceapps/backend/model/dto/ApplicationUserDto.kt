@@ -4,7 +4,7 @@ import com.google.gson.annotations.SerializedName
 
 class ApplicationUserDto(
         @SerializedName("id")
-        var id: Int = 0,
+        var id: Long = 0,
         @SerializedName("userName")
         val userName: String = "root",
         @SerializedName("password")

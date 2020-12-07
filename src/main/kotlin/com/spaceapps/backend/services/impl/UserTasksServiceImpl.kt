@@ -23,7 +23,7 @@ class UserTasksServiceImpl constructor(
             val taskDao = UserTaskDao(
                     title = task.title,
                     text = task.text,
-                    userId = userId
+                    userId = userId.toInt()
             )
             val dao = tasksRepository.save(taskDao)
             return UserTaskDto(
@@ -38,7 +38,7 @@ class UserTasksServiceImpl constructor(
     override fun deleteTaskById(taskId: Int): Int {
         return (SecurityContextHolder.getContext().authentication?.principal as? ApplicationUser)?.let { user ->
             tasksRepository.findUserTaskDaoById(taskId)?.let { taskDao ->
-                if (taskDao.userId == user.id) {
+                if (taskDao.userId == user.id.toInt()) {
                     tasksRepository.deleteById(taskId)
                     return taskId
                 } else {
@@ -52,7 +52,7 @@ class UserTasksServiceImpl constructor(
         return (SecurityContextHolder.getContext().authentication?.principal as? ApplicationUser)?.let { user ->
             if (tasksRepository.existsById(task.id)) {
                 tasksRepository.findUserTaskDaoById(task.id)?.let { taskDao ->
-                    if (taskDao.userId == user.id) {
+                    if (taskDao.userId == user.id.toInt()) {
                         val dao = tasksRepository.save(UserTaskDao(title = task.title, text = task.text))
                         UserTaskDto(dao.userId, dao.id, dao.text.orEmpty(), dao.title.orEmpty())
                     } else {

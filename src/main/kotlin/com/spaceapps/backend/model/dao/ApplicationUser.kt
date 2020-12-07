@@ -12,7 +12,7 @@ import javax.persistence.Table
 data class ApplicationUser(
         @Id
         @Column
-        var id: Int = 0,
+        var id: Long = 0,
         @Column(unique = true)
         val userName: String = "root",
         @Column

@@ -5,6 +5,7 @@ import com.spaceapps.backend.model.dto.UserTaskDto
 import com.spaceapps.backend.model.exceptions.NotFoundException
 import com.spaceapps.backend.services.UserTasksService
 import com.spaceapps.backend.utils.LOGGER
+import io.swagger.annotations.Api
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.access.AccessDeniedException
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("tasks")
+@Api(value = "User Tasks Controller", tags = ["User Tasks"], description = "User Tasks management")
 class TasksController constructor(
         private val tasksService: UserTasksService
 ) {
