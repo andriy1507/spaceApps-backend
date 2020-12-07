@@ -30,13 +30,15 @@ class PostsController @Autowired constructor(
     fun getPosts(
             @PageableDefault(
                     size = 20,
-                    page = 1,
+                    page = 0,
                     sort = ["created"],
                     direction = Sort.Direction.DESC
             )
             pageable: Pageable
     ): PaginationResponse<PostDto> {
-        return PaginationResponse(0, 0, emptyList())
+        return postsService.getPostsPaginated(pageable).let {
+            PaginationResponse(it.number, it.totalElements, it.content.map { post -> post.toDto() })
+        }
     }
 
     @GetMapping("/{postId}")
@@ -58,12 +60,14 @@ class PostsController @Autowired constructor(
     @DeleteMapping("/{postId}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("Deletes post")
-    fun deletePosts(@PathVariable postId: Int): PostDto {
-        return PostDto(0, "", "", LocalDateTime.now())
+    fun deletePosts(@PathVariable postId: Long): PostDto? {
+        return (SecurityContextHolder.getContext().authentication.principal as? ApplicationUser)?.let {
+            postsService.deletePost(it.id, postId)
+        }
     }
 
     @PutMapping("/{postId}")
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
     @ApiOperation("Editing post")
     fun updatePost(@PathVariable postId: Int): PostDto {
         return PostDto(0, "", "", LocalDateTime.now())
@@ -72,14 +76,28 @@ class PostsController @Autowired constructor(
     @PutMapping("/like/{postId}")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation("Adds like to post")
-    fun likePost(@PathVariable postId: Long): PostDto {
-        return PostDto(0, "", "", LocalDateTime.now())
+    fun likePost(@PathVariable postId: Long): PostDto? {
+        return (SecurityContextHolder.getContext().authentication.principal as? ApplicationUser)?.let {
+            postsService.likePost(postId, it.id)
+        }
     }
 
     @DeleteMapping("/like/{postId}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("Removes like from post")
-    fun unlikePost(@PathVariable postId: Int): PostDto {
-        return PostDto(0, "", "", LocalDateTime.now())
+    fun unlikePost(@PathVariable postId: Long): PostDto? {
+        return (SecurityContextHolder.getContext().authentication.principal as? ApplicationUser)?.let {
+            postsService.unlikePost(postId, it.id)
+        }
+    }
+
+    @PostMapping("/comment/{postId}")
+    fun commentPost(@PathVariable postId: Long) {
+
+    }
+
+    @DeleteMapping("/comment/{commentId}")
+    fun deleteComment(@PathVariable commentId: Long) {
+
     }
 }

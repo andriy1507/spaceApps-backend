@@ -1,6 +1,5 @@
 package com.spaceapps.backend.controllers
 
-import com.spaceapps.backend.services.EmailService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import org.joda.time.LocalDate
@@ -13,9 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder
 
 @RestController
 @Api(value = "Root Controller", tags = ["Root"], description = "Root endpoints")
-class RootController(
-        private val emailService: EmailService
-) {
+class RootController {
 
     @GetMapping("/")
     @ResponseStatus(HttpStatus.OK)

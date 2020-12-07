@@ -8,4 +8,6 @@ interface CommentsRepository : CrudRepository<CommentDao, Long> {
     fun findAllByPostId(postId: Long): List<CommentDao>
 
     fun countAllByPostId(postId: Long): Long
+
+    fun deleteAllByPostId(postId: Long)
 }

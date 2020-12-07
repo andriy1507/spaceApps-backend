@@ -6,7 +6,7 @@ data class PaginationResponse<T>(
         @SerializedName("page")
         val page: Int,
         @SerializedName("total")
-        val total: Int,
+        val total: Long,
         @SerializedName("content")
         val content: List<T>
 )

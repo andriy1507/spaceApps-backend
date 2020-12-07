@@ -28,3 +28,7 @@ spring:
 auth:
     token:
         secret-key: 'K%hM3+3eX6-^tL*BhDYya@V!53aSBH!q'
+fcm:
+    service-account-file: 'spaceapps-5465e-firebase-adminsdk-lbob1-56b40c1145.json'
+    database-url: 'https://spaceapps-5465e.firebaseio.com'
+

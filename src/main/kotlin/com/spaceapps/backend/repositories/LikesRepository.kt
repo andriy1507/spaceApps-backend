@@ -9,4 +9,6 @@ interface LikesRepository : CrudRepository<LikeDao, Long> {
 
     fun countAllByPostId(postId: Long): Long
 
+    fun deleteAllByPostId(postId: Long)
+
 }
