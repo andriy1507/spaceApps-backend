@@ -7,6 +7,8 @@ import org.springframework.data.domain.Pageable
 
 interface PostsService {
 
+    fun getPostsPaginatedAfterId(id: Long, pageable: Pageable): Page<PostDao>
+
     fun getPostsPaginated(pageable: Pageable): Page<PostDao>
 
     fun createPost(userId: Long, postDto: PostDto): PostDto

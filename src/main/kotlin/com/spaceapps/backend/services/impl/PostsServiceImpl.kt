@@ -20,6 +20,10 @@ class PostsServiceImpl @Autowired constructor(
         private val postsRepository: PostsRepository
 ) : PostsService {
 
+    override fun getPostsPaginatedAfterId(id: Long, pageable: Pageable): Page<PostDao> {
+        return postsRepository.findAllByIdAfter(id, pageable)
+    }
+
     override fun getPostsPaginated(pageable: Pageable): Page<PostDao> {
         return postsRepository.findAll(pageable)
     }

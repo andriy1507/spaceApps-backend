@@ -27,16 +27,18 @@ class PostsController @Autowired constructor(
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("Returns pagination for posts")
-    fun getPosts(
+    fun getPostsAfterId(
+            @RequestParam(name = "last_id", required = false, defaultValue = "0")
+            lastId: Long = 0,
             @PageableDefault(
                     size = 20,
                     page = 0,
-                    sort = ["created"],
+                    sort = ["id"],
                     direction = Sort.Direction.DESC
             )
             pageable: Pageable
     ): PaginationResponse<PostDto> {
-        return postsService.getPostsPaginated(pageable).let {
+        return postsService.getPostsPaginatedAfterId(lastId, pageable).let {
             PaginationResponse(it.number, it.totalElements, it.content.map { post -> post.toDto() })
         }
     }
