@@ -13,7 +13,7 @@ class PushNotificationsController @Autowired constructor(
         private val pushService: PushNotificationService
 ) {
 
-    @PostMapping("/send-token/{token}")
+    @PostMapping("/send/{token}")
     fun sendNotification(
             @PathVariable("token") token: String,
             @RequestParam("title", required = false, defaultValue = "") title: String? = null,
@@ -21,5 +21,12 @@ class PushNotificationsController @Autowired constructor(
             @RequestParam("imageUrl", required = false, defaultValue = "") imageUrl: String? = null
     ) {
         pushService.sendSimpleNotification(title, text, imageUrl, token)
+    }
+
+    @PostMapping("/register-device/{token}")
+    fun registerDevice(
+            @PathVariable("token") token: String
+    ) {
+
     }
 }

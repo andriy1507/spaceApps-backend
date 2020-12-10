@@ -23,4 +23,7 @@ data class ApplicationUser(
     @OneToMany
     val subscribers = mutableListOf<ApplicationUser>()
 
+    @OneToMany
+    val devices = mutableListOf<UserDeviceDao>()
+
 }

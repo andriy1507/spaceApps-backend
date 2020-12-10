@@ -9,4 +9,5 @@ interface PushNotificationService {
             token: String
     )
 
+    fun sendToUser(title: String?, text: String, imageUrl: String?, userId: Long)
 }

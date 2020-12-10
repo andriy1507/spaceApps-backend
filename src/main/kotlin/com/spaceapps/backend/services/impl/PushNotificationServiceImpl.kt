@@ -6,6 +6,7 @@ import com.google.firebase.FirebaseOptions
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
 import com.spaceapps.backend.config.FcmProperties
+import com.spaceapps.backend.repositories.ApplicationUserRepository
 import com.spaceapps.backend.services.PushNotificationService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -14,7 +15,8 @@ import javax.annotation.PostConstruct
 
 @Service
 class PushNotificationServiceImpl @Autowired constructor(
-        private val properties: FcmProperties
+        private val properties: FcmProperties,
+        private val userRepository: ApplicationUserRepository
 ) : PushNotificationService {
 
     private lateinit var messaging: FirebaseMessaging
@@ -40,5 +42,11 @@ class PushNotificationServiceImpl @Autowired constructor(
                 ))
                 .build()
         messaging.send(message)
+    }
+
+    override fun sendToUser(title: String?, text: String, imageUrl: String?, userId: Long) {
+        userRepository.findById(userId).get().devices.forEach {
+            sendSimpleNotification(title, text, imageUrl, it.fcmToken)
+        }
     }
 }
