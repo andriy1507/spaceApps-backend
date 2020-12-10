@@ -44,7 +44,7 @@ class SecurityConfig @Autowired constructor(
                     )
                     .permitAll()
                     .anyRequest()
-                    .permitAll()
+                    .authenticated()
                     .and()
                     .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
                     .sessionManagement()
