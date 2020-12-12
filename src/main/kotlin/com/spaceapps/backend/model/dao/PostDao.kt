@@ -1,6 +1,6 @@
 package com.spaceapps.backend.model.dao
 
-import com.spaceapps.backend.model.dto.PostDto
+import com.spaceapps.backend.model.dto.PostDtoRequest
 import javax.persistence.*
 
 @Entity(name = "posts")
@@ -26,7 +26,7 @@ class PostDao(
     @OneToMany
     var likes: MutableList<LikeDao> = mutableListOf()
 
-    fun toDto() = PostDto(
+    fun toDto() = PostDtoRequest(
             id,
             title.orEmpty(),
             text.orEmpty()

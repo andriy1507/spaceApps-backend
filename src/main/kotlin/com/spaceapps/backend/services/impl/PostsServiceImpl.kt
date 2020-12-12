@@ -1,12 +1,15 @@
 package com.spaceapps.backend.services.impl
 
+import com.spaceapps.backend.model.PaginationResponse
 import com.spaceapps.backend.model.dao.LikeDao
 import com.spaceapps.backend.model.dao.PostDao
-import com.spaceapps.backend.model.dto.PostDto
+import com.spaceapps.backend.model.dto.PostDtoRequest
+import com.spaceapps.backend.model.dto.PostDtoResponse
 import com.spaceapps.backend.repositories.CommentsRepository
 import com.spaceapps.backend.repositories.LikesRepository
 import com.spaceapps.backend.repositories.PostsRepository
 import com.spaceapps.backend.services.PostsService
+import org.joda.time.LocalDateTime
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
@@ -24,17 +27,40 @@ class PostsServiceImpl @Autowired constructor(
         return postsRepository.findAllByIdAfter(id, pageable)
     }
 
-    override fun getPostsPaginated(pageable: Pageable): Page<PostDao> {
-        return postsRepository.findAll(pageable)
+    override fun getPostsPaginated(userId: Long, pageable: Pageable): PaginationResponse<PostDtoResponse> {
+        val page = postsRepository.findAll(pageable)
+        return PaginationResponse(
+                page.number,
+                page.totalElements,
+                page.map { dao ->
+                    dao.let {
+                        PostDtoResponse(
+                                it.id,
+                                it.title.orEmpty(),
+                                it.text.orEmpty(),
+                                LocalDateTime(it.created),
+                                it.likes.any { like -> like.userId == userId }
+                        )
+                    }
+                }.toList()
+        )
     }
 
-    override fun createPost(userId: Long, postDto: PostDto): PostDto {
-        val dao = postDto.toDao().apply { this.userId = userId }
-        return postsRepository.save(dao).toDto()
+    override fun createPost(userId: Long, postDtoRequest: PostDtoRequest): PostDtoResponse {
+        val dao = postDtoRequest.toDao().apply { this.userId = userId }
+        return postsRepository.save(dao).let {
+            PostDtoResponse(
+                    it.id,
+                    it.title.orEmpty(),
+                    it.text.orEmpty(),
+                    LocalDateTime(it.created),
+                    it.likes.any { like -> like.userId == userId }
+            )
+        }
     }
 
     @Transactional
-    override fun deletePost(userId: Long, postId: Long): PostDto {
+    override fun deletePost(userId: Long, postId: Long): PostDtoRequest {
         val post = postsRepository.findById(postId).get()
         postsRepository.delete(post)
         commentsRepository.deleteAllByPostId(postId)
@@ -43,20 +69,32 @@ class PostsServiceImpl @Autowired constructor(
     }
 
     @Transactional
-    override fun likePost(postId: Long, userId: Long): PostDto {
+    override fun likePost(postId: Long, userId: Long): PostDtoResponse {
         val post = postsRepository.findById(postId).get()
         post.likes.add(likesRepository.save(LikeDao(userId = userId, postId = postId)))
-        return post.toDto()
+        return PostDtoResponse(
+                postId,
+                post.title.orEmpty(),
+                post.text.orEmpty(),
+                LocalDateTime(post.created),
+                true
+        )
     }
 
     @Transactional
-    override fun unlikePost(postId: Long, userId: Long): PostDto {
+    override fun unlikePost(postId: Long, userId: Long): PostDtoResponse {
         val post = postsRepository.findById(postId).get()
         post.likes.find { it.userId == userId }?.let { like ->
             post.likes.remove(like)
             likesRepository.delete(like)
             postsRepository.save(post)
         }
-        return post.toDto()
+        return PostDtoResponse(
+                postId,
+                post.title.orEmpty(),
+                post.text.orEmpty(),
+                LocalDateTime(post.created),
+                false
+        )
     }
 }

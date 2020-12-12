@@ -2,7 +2,8 @@ package com.spaceapps.backend.controllers
 
 import com.spaceapps.backend.model.PaginationResponse
 import com.spaceapps.backend.model.dao.ApplicationUser
-import com.spaceapps.backend.model.dto.PostDto
+import com.spaceapps.backend.model.dto.PostDtoRequest
+import com.spaceapps.backend.model.dto.PostDtoResponse
 import com.spaceapps.backend.services.PostsService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
@@ -25,9 +26,7 @@ class PostsController @Autowired constructor(
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("Returns pagination for posts")
-    fun getPostsAfterId(
-            @RequestParam(name = "last_id", required = false, defaultValue = "0")
-            lastId: Long = 0,
+    fun getPosts(
             @PageableDefault(
                     size = 20,
                     page = 0,
@@ -35,48 +34,47 @@ class PostsController @Autowired constructor(
                     direction = Sort.Direction.DESC
             )
             pageable: Pageable
-    ): PaginationResponse<PostDto> {
-        return postsService.getPostsPaginatedAfterId(lastId, pageable).let {
-            PaginationResponse(it.number, it.totalElements, it.content.map { post -> post.toDto() })
-        }
+    ): PaginationResponse<PostDtoResponse> {
+        val user = SecurityContextHolder.getContext().authentication.principal as ApplicationUser
+        return postsService.getPostsPaginated(user.id, pageable)
     }
 
-    @GetMapping("/{postId}")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation("Returns specific post with id")
-    fun getPost(@PathVariable postId: Long): PostDto {
-        return PostDto(0, "", "")
-    }
+//    @GetMapping("/{postId}")
+//    @ResponseStatus(HttpStatus.OK)
+//    @ApiOperation("Returns specific post with id")
+//    fun getPost(@PathVariable("postId") postId: Long): PostDtoRequest {
+//        return PostDtoRequest(0, "", "")
+//    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation("Creates new post")
-    fun createPost(@RequestBody post: PostDto): ResponseEntity<*> {
+    fun createPost(@RequestBody postRequest: PostDtoRequest): ResponseEntity<*> {
         return (SecurityContextHolder.getContext().authentication.principal as? ApplicationUser)?.let {
-            ResponseEntity.ok(postsService.createPost(it.id, post))
+            ResponseEntity.ok(postsService.createPost(it.id, postRequest))
         } ?: ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null)
     }
 
-    @DeleteMapping("/{postId}")
-    @ResponseStatus(HttpStatus.OK)
-    @ApiOperation("Deletes post")
-    fun deletePosts(@PathVariable postId: Long): PostDto? {
-        return (SecurityContextHolder.getContext().authentication.principal as? ApplicationUser)?.let {
-            postsService.deletePost(it.id, postId)
-        }
-    }
-
-    @PutMapping("/{postId}")
-    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
-    @ApiOperation("Editing post")
-    fun updatePost(@PathVariable postId: Int): PostDto {
-        return PostDto(0, "", "")
-    }
+//    @DeleteMapping("/{postId}")
+//    @ResponseStatus(HttpStatus.OK)
+//    @ApiOperation("Deletes post")
+//    fun deletePosts(@PathVariable("postId") postId: Long): PostDtoRequest? {
+//        return (SecurityContextHolder.getContext().authentication.principal as? ApplicationUser)?.let {
+//            postsService.deletePost(it.id, postId)
+//        }
+//    }
+//
+//    @PutMapping("/{postId}")
+//    @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
+//    @ApiOperation("Editing post")
+//    fun updatePost(@PathVariable postId: Int): PostDtoRequest {
+//        return PostDtoRequest(0, "", "")
+//    }
 
     @PutMapping("/like/{postId}")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiOperation("Adds like to post")
-    fun likePost(@PathVariable postId: Long): PostDto? {
+    fun likePost(@PathVariable postId: Long): PostDtoResponse? {
         return (SecurityContextHolder.getContext().authentication.principal as? ApplicationUser)?.let {
             postsService.likePost(postId, it.id)
         }
@@ -85,19 +83,19 @@ class PostsController @Autowired constructor(
     @DeleteMapping("/like/{postId}")
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("Removes like from post")
-    fun unlikePost(@PathVariable postId: Long): PostDto? {
+    fun unlikePost(@PathVariable postId: Long): PostDtoResponse? {
         return (SecurityContextHolder.getContext().authentication.principal as? ApplicationUser)?.let {
             postsService.unlikePost(postId, it.id)
         }
     }
 
-    @PostMapping("/comment/{postId}")
-    fun commentPost(@PathVariable postId: Long) {
-
-    }
-
-    @DeleteMapping("/comment/{commentId}")
-    fun deleteComment(@PathVariable commentId: Long) {
-
-    }
+//    @PostMapping("/comment/{postId}")
+//    fun commentPost(@PathVariable postId: Long) {
+//
+//    }
+//
+//    @DeleteMapping("/comment/{commentId}")
+//    fun deleteComment(@PathVariable commentId: Long) {
+//
+//    }
 }
