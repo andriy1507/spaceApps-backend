@@ -11,14 +11,12 @@ class PostDto(
         @SerializedName("title")
         val title: String,
         @SerializedName("text")
-        val text: String,
-        @SerializedName("created")
-        val created: LocalDateTime
+        val text: String
 ) {
     fun toDao() = PostDao(
             id = id,
             title = title,
             text = text,
-            created = created.toDate().time
+            created = LocalDateTime.now().toDate().time
     )
 }

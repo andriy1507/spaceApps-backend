@@ -6,7 +6,6 @@ import com.spaceapps.backend.model.dto.PostDto
 import com.spaceapps.backend.services.PostsService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
-import org.joda.time.LocalDateTime
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -15,7 +14,6 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
-import javax.transaction.Transactional
 
 @RestController
 @RequestMapping("posts")
@@ -47,7 +45,7 @@ class PostsController @Autowired constructor(
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("Returns specific post with id")
     fun getPost(@PathVariable postId: Long): PostDto {
-        return PostDto(0, "", "", LocalDateTime.now())
+        return PostDto(0, "", "")
     }
 
     @PostMapping
@@ -72,7 +70,7 @@ class PostsController @Autowired constructor(
     @ResponseStatus(HttpStatus.NOT_IMPLEMENTED)
     @ApiOperation("Editing post")
     fun updatePost(@PathVariable postId: Int): PostDto {
-        return PostDto(0, "", "", LocalDateTime.now())
+        return PostDto(0, "", "")
     }
 
     @PutMapping("/like/{postId}")

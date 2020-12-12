@@ -1,7 +1,6 @@
 package com.spaceapps.backend.model.dao
 
 import com.spaceapps.backend.model.dto.PostDto
-import org.joda.time.LocalDateTime
 import javax.persistence.*
 
 @Entity(name = "posts")
@@ -30,7 +29,6 @@ class PostDao(
     fun toDto() = PostDto(
             id,
             title.orEmpty(),
-            text.orEmpty(),
-            LocalDateTime(created)
+            text.orEmpty()
     )
 }
