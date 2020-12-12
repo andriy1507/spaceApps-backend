@@ -39,7 +39,9 @@ class PostsServiceImpl @Autowired constructor(
                                 it.title.orEmpty(),
                                 it.text.orEmpty(),
                                 LocalDateTime(it.created),
-                                it.likes.any { like -> like.userId == userId }
+                                it.likes.any { like -> like.userId == userId },
+                                it.likes.size.toLong(),
+                                it.comments.size.toLong()
                         )
                     }
                 }.toList()
@@ -54,7 +56,9 @@ class PostsServiceImpl @Autowired constructor(
                     it.title.orEmpty(),
                     it.text.orEmpty(),
                     LocalDateTime(it.created),
-                    it.likes.any { like -> like.userId == userId }
+                    it.likes.any { like -> like.userId == userId },
+                    it.likes.size.toLong(),
+                    it.comments.size.toLong()
             )
         }
     }
@@ -77,7 +81,9 @@ class PostsServiceImpl @Autowired constructor(
                 post.title.orEmpty(),
                 post.text.orEmpty(),
                 LocalDateTime(post.created),
-                true
+                true,
+                post.likes.size + 1L,
+                post.comments.size.toLong()
         )
     }
 
@@ -94,7 +100,9 @@ class PostsServiceImpl @Autowired constructor(
                 post.title.orEmpty(),
                 post.text.orEmpty(),
                 LocalDateTime(post.created),
-                false
+                false,
+                post.likes.size - 1L,
+                post.comments.size.toLong()
         )
     }
 }

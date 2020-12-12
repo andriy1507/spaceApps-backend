@@ -29,7 +29,11 @@ data class PostDtoResponse(
         @SerializedName("text")
         val text: String,
         @SerializedName("created")
-        val created:LocalDateTime,
+        val created: LocalDateTime,
         @SerializedName("isLiked")
-        val isLiked:Boolean
+        val isLiked: Boolean,
+        @SerializedName("likesCount")
+        val likesCount: Long,
+        @SerializedName("commentsCount")
+        val commentsCount: Long
 )
