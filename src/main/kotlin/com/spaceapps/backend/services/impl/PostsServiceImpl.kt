@@ -82,7 +82,7 @@ class PostsServiceImpl @Autowired constructor(
                 post.text.orEmpty(),
                 LocalDateTime(post.created),
                 true,
-                post.likes.size + 1L,
+                post.likes.size.toLong(),
                 post.comments.size.toLong()
         )
     }
@@ -101,7 +101,7 @@ class PostsServiceImpl @Autowired constructor(
                 post.text.orEmpty(),
                 LocalDateTime(post.created),
                 false,
-                post.likes.size - 1L,
+                post.likes.size.toLong(),
                 post.comments.size.toLong()
         )
     }
