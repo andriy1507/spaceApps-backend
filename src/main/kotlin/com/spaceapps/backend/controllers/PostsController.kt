@@ -2,11 +2,13 @@ package com.spaceapps.backend.controllers
 
 import com.spaceapps.backend.model.PaginationResponse
 import com.spaceapps.backend.model.dao.ApplicationUser
+import com.spaceapps.backend.model.dto.CommentDto
 import com.spaceapps.backend.model.dto.PostDtoRequest
 import com.spaceapps.backend.model.dto.PostDtoResponse
 import com.spaceapps.backend.services.PostsService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
+import io.swagger.v3.oas.annotations.headers.Header
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -89,10 +91,19 @@ class PostsController @Autowired constructor(
         }
     }
 
-//    @PostMapping("/comment/{postId}")
-//    fun commentPost(@PathVariable postId: Long) {
-//
-//    }
+    @PostMapping("/comment/{postId}")
+    fun commentPost(@PathVariable("postId") postId: Long, @RequestParam("text") text: String) {
+        (SecurityContextHolder.getContext().authentication.principal as? ApplicationUser)?.let {
+            postsService.createComment(it.id, postId, text)
+        } ?: ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null)
+    }
+
+    @GetMapping("/comments/{postId}")
+    fun getPostComments(@PathVariable("postId") postId: Long): ResponseEntity<*> {
+        return postsService.getCommentsForPost(postId)?.let {
+            ResponseEntity.ok(it)
+        } ?: ResponseEntity.status(HttpStatus.NOT_FOUND).body("Post with id $postId not found")
+    }
 //
 //    @DeleteMapping("/comment/{commentId}")
 //    fun deleteComment(@PathVariable commentId: Long) {

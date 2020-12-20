@@ -1,8 +1,10 @@
 package com.spaceapps.backend.services.impl
 
 import com.spaceapps.backend.model.PaginationResponse
+import com.spaceapps.backend.model.dao.CommentDao
 import com.spaceapps.backend.model.dao.LikeDao
 import com.spaceapps.backend.model.dao.PostDao
+import com.spaceapps.backend.model.dto.CommentDto
 import com.spaceapps.backend.model.dto.PostDtoRequest
 import com.spaceapps.backend.model.dto.PostDtoResponse
 import com.spaceapps.backend.repositories.CommentsRepository
@@ -13,6 +15,7 @@ import org.joda.time.LocalDateTime
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 
@@ -104,5 +107,29 @@ class PostsServiceImpl @Autowired constructor(
                 post.likes.size.toLong(),
                 post.comments.size.toLong()
         )
+    }
+
+    override fun createComment(userId: Long, postId: Long, text: String) {
+        val dao = CommentDao(
+                userId = userId,
+                postId = postId,
+                text = text
+        )
+        return commentsRepository.save(dao).let { comment ->
+            postsRepository.findByIdOrNull(postId)?.let {
+                postsRepository.save(it.apply { comments.add(comment) })
+            }
+        }
+    }
+
+    override fun getCommentsForPost(postId: Long): List<CommentDto>? {
+        return postsRepository.findByIdOrNull(postId)?.comments?.map {
+            CommentDto(
+                    it.id,
+                    it.postId,
+                    it.userId,
+                    it.text.orEmpty()
+            )
+        }
     }
 }

@@ -2,6 +2,7 @@ package com.spaceapps.backend.services
 
 import com.spaceapps.backend.model.PaginationResponse
 import com.spaceapps.backend.model.dao.PostDao
+import com.spaceapps.backend.model.dto.CommentDto
 import com.spaceapps.backend.model.dto.PostDtoRequest
 import com.spaceapps.backend.model.dto.PostDtoResponse
 import org.springframework.data.domain.Page
@@ -21,4 +22,7 @@ interface PostsService {
 
     fun unlikePost(postId: Long, userId: Long): PostDtoResponse
 
+    fun createComment(userId: Long, postId: Long, text: String)
+
+    fun getCommentsForPost(postId: Long): List<CommentDto>?
 }

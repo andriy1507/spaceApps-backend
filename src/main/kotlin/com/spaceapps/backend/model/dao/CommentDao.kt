@@ -9,9 +9,9 @@ class CommentDao(
         @GeneratedValue(strategy = GenerationType.AUTO)
         var id: Long = 0,
         @Column(name = "userId")
-        var userId: Int = 0,
+        var userId: Long = 0,
         @Column(name = "postId")
-        var postId: Int = 0,
+        var postId: Long = 0,
         @Column(name = "text")
         var text: String? = null
 )
