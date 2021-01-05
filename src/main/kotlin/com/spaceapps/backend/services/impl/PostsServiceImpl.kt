@@ -7,6 +7,7 @@ import com.spaceapps.backend.model.dao.PostDao
 import com.spaceapps.backend.model.dto.CommentDto
 import com.spaceapps.backend.model.dto.PostDtoRequest
 import com.spaceapps.backend.model.dto.PostDtoResponse
+import com.spaceapps.backend.model.dto.SearchPostDtoResponse
 import com.spaceapps.backend.repositories.CommentsRepository
 import com.spaceapps.backend.repositories.LikesRepository
 import com.spaceapps.backend.repositories.PostsRepository
@@ -129,6 +130,23 @@ class PostsServiceImpl @Autowired constructor(
                     it.postId,
                     it.userId,
                     it.text.orEmpty()
+            )
+        }
+    }
+
+    override fun searchPosts(query: String, pageable: Pageable): PaginationResponse<SearchPostDtoResponse> {
+        return postsRepository.searchPostsByTitleAndText(query, pageable).let {
+            PaginationResponse(
+                    it.number,
+                    it.totalElements,
+                    it.content.map { p ->
+                        SearchPostDtoResponse(
+                                p.id,
+                                p.title.orEmpty(),
+                                p.text.orEmpty(),
+                                LocalDateTime(p.created)
+                        )
+                    }
             )
         }
     }

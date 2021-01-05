@@ -5,6 +5,7 @@ import com.spaceapps.backend.model.dao.PostDao
 import com.spaceapps.backend.model.dto.CommentDto
 import com.spaceapps.backend.model.dto.PostDtoRequest
 import com.spaceapps.backend.model.dto.PostDtoResponse
+import com.spaceapps.backend.model.dto.SearchPostDtoResponse
 import org.springframework.data.domain.Page
 import org.springframework.data.domain.Pageable
 
@@ -25,4 +26,6 @@ interface PostsService {
     fun createComment(userId: Long, postId: Long, text: String)
 
     fun getCommentsForPost(postId: Long): List<CommentDto>?
+
+    fun searchPosts(query: String, pageable: Pageable): PaginationResponse<SearchPostDtoResponse>
 }

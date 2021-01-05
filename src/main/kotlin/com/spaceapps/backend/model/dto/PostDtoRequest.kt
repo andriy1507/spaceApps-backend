@@ -37,3 +37,14 @@ data class PostDtoResponse(
         @SerializedName("commentsCount")
         val commentsCount: Long
 )
+
+data class SearchPostDtoResponse(
+        @SerializedName("id")
+        val id: Long,
+        @SerializedName("title")
+        val title: String,
+        @SerializedName("text")
+        val text: String,
+        @SerializedName("created")
+        val created: LocalDateTime
+)

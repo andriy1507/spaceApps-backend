@@ -2,13 +2,13 @@ package com.spaceapps.backend.controllers
 
 import com.spaceapps.backend.model.PaginationResponse
 import com.spaceapps.backend.model.dao.ApplicationUser
-import com.spaceapps.backend.model.dto.CommentDto
+import com.spaceapps.backend.model.dao.PostDao
 import com.spaceapps.backend.model.dto.PostDtoRequest
 import com.spaceapps.backend.model.dto.PostDtoResponse
+import com.spaceapps.backend.model.dto.SearchPostDtoResponse
 import com.spaceapps.backend.services.PostsService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
-import io.swagger.v3.oas.annotations.headers.Header
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
@@ -24,6 +24,14 @@ import org.springframework.web.bind.annotation.*
 class PostsController @Autowired constructor(
         private val postsService: PostsService
 ) {
+
+    @GetMapping("/search")
+    fun searchPosts(
+            @RequestParam("query") query: String,
+            @PageableDefault(size = 20) pageable: Pageable
+    ): PaginationResponse<SearchPostDtoResponse> {
+        return postsService.searchPosts(query, pageable)
+    }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
