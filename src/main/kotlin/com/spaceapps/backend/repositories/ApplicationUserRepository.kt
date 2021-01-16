@@ -12,6 +12,4 @@ interface ApplicationUserRepository : CrudRepository<ApplicationUser, Long> {
     fun findAll(pageable: Pageable): Page<ApplicationUser>
 
     fun getByUserName(name: String): ApplicationUser?
-
-    fun findAllBySubscribersContains(subscriber: ApplicationUser)
 }

@@ -4,12 +4,12 @@ import javax.persistence.*
 
 @Entity
 @Table
-data class UserDeviceDao(
+data class SubscriptionDao(
         @Id
         @GeneratedValue(strategy = GenerationType.AUTO)
         var id: Long = 0,
-        @Column(name = "applicationUserId")
-        var userId: Long = 0,
-        @Column(name = "fcmToken")
-        var fcmToken: String = ""
+        @Column
+        val userId: Long = 0,
+        @Column
+        val subscriberId: Long = 0
 )

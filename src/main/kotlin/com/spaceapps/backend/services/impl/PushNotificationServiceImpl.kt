@@ -44,8 +44,8 @@ class PushNotificationServiceImpl @Autowired constructor(
         messaging.send(message)
     }
 
-    override fun sendToUser(title: String?, text: String, imageUrl: String?, userId: Long) {
-        userRepository.findById(userId).get().devices.forEach {
+    override fun sendToUser(title: String?, text: String, imageUrl: String?, userName: String) {
+        userRepository.getByUserName(userName)?.devices?.forEach {
             sendSimpleNotification(title, text, imageUrl, it.fcmToken)
         }
     }

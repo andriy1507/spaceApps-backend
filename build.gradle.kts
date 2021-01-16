@@ -39,6 +39,8 @@ dependencies {
     implementation("com.google.code.gson:gson:2.8.6")
     implementation("joda-time:joda-time:2.10.6")
     implementation("com.google.firebase:firebase-admin:7.0.0")
+    implementation("com.graphql-java:graphql-spring-boot-starter:5.0.2")
+    implementation("com.graphql-java:graphql-java-tools:5.2.4")
     implementation("io.jsonwebtoken:jjwt-api:0.11.1")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.1")
     runtimeOnly("io.jsonwebtoken:jjwt-gson:0.11.1")

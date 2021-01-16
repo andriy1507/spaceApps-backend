@@ -35,12 +35,17 @@ class SecurityConfig @Autowired constructor(
             cors().and().csrf().disable()
                     .authorizeRequests()
                     .antMatchers(
-                            "/authorization/**",
+                            "/authorization/sign-in",
+                            "/authorization/sign-up",
+                            "/authorization/refresh-token",
+                            "/push-notification/send-to-user",
                             "/swagger-ui/**",
                             "/swagger-resources/**",
                             "/swagger-ui.html",
                             "/v2/api-docs",
-                            "/webjars/**"
+                            "/webjars/**",
+                            "/graphql",
+                            "/"
                     )
                     .permitAll()
                     .anyRequest()

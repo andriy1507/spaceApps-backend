@@ -2,7 +2,6 @@ package com.spaceapps.backend.controllers
 
 import com.spaceapps.backend.services.PushNotificationService
 import io.swagger.annotations.Api
-import org.jetbrains.annotations.Nullable
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 
@@ -23,10 +22,17 @@ class PushNotificationsController @Autowired constructor(
         pushService.sendSimpleNotification(title, text, imageUrl, token)
     }
 
-    @PostMapping("/register-device/{token}")
-    fun registerDevice(
-            @PathVariable("token") token: String
+    @PostMapping("/send-to-user")
+    fun sendNotificationToUser(
+            @RequestParam("title") title: String,
+            @RequestParam("text") text: String,
+            @RequestParam("user") userName: String
     ) {
-
+        pushService.sendToUser(
+                title,
+                text,
+                "",
+                userName
+        )
     }
 }

@@ -1,5 +1,6 @@
 package com.spaceapps.backend.controllers
 
+import com.spaceapps.backend.model.dao.ApplicationUser
 import com.spaceapps.backend.model.exceptions.UsernameExistsException
 import com.spaceapps.backend.repositories.ApplicationUserRepository
 import com.spaceapps.backend.services.AuthorizationService
@@ -7,6 +8,7 @@ import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -67,6 +69,14 @@ class AuthorizationController constructor(
         } catch (e: Exception) {
             ResponseEntity.badRequest().body(e)
         }
+    }
+
+    @PutMapping("/fcm-token/{token}")
+    fun addDeviceFcmToken(@PathVariable token: String):ResponseEntity<Unit> {
+        return (SecurityContextHolder.getContext().authentication.principal as? ApplicationUser)?.let {
+            authorizationService.addDeviceToken(token, it)
+            ResponseEntity.ok().build()
+        } ?: ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
     }
 
 //    @PostMapping("/forgot-password")

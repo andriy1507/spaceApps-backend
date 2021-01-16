@@ -15,5 +15,5 @@ interface PostsRepository : CrudRepository<PostDao, Long> {
 
     fun findAllByIdAfter(id: Long, pageable: Pageable): Page<PostDao>
 
-    fun findAllByUserId(userId: Int): List<PostDao>
+    fun findAllByUserId(userId: Int, pageable: Pageable): Page<PostDao>
 }

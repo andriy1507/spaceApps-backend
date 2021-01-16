@@ -14,14 +14,12 @@ data class ApplicationUser(
         @Column(unique = true)
         val userName: String = "root",
         @Column
-        val pass: String = "root",
-        @Column
-        var fcmToken: String? = null
+        val pass: String = "root"
 ) : User(userName, pass, emptyList()) {
     fun toDto() = ApplicationUserDto(id, userName, pass)
 
     @OneToMany
-    val subscribers = mutableListOf<ApplicationUser>()
+    val subscriptions = mutableListOf<SubscriptionDao>()
 
     @OneToMany
     val devices = mutableListOf<UserDeviceDao>()
