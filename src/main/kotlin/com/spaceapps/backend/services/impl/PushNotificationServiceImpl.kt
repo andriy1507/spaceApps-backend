@@ -5,9 +5,12 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
+import com.google.firebase.messaging.MulticastMessage
 import com.spaceapps.backend.config.FcmProperties
 import com.spaceapps.backend.repositories.ApplicationUserRepository
+import com.spaceapps.backend.repositories.UserDevicesRepository
 import com.spaceapps.backend.services.PushNotificationService
+import com.spaceapps.backend.utils.LOGGER
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.io.FileInputStream
@@ -16,7 +19,8 @@ import javax.annotation.PostConstruct
 @Service
 class PushNotificationServiceImpl @Autowired constructor(
         private val properties: FcmProperties,
-        private val userRepository: ApplicationUserRepository
+        private val userRepository: ApplicationUserRepository,
+        private val devicesRepository: UserDevicesRepository
 ) : PushNotificationService {
 
     private lateinit var messaging: FirebaseMessaging
@@ -45,8 +49,19 @@ class PushNotificationServiceImpl @Autowired constructor(
     }
 
     override fun sendToUser(title: String?, text: String, imageUrl: String?, userName: String) {
-        userRepository.getByUserName(userName)?.devices?.forEach {
-            sendSimpleNotification(title, text, imageUrl, it.fcmToken)
+        userRepository.getByUserName(userName)?.let { user ->
+            devicesRepository.getAllByUserId(user.id).let { devices ->
+                LOGGER.info("${userName}\'s devices: $devices")
+                val message = MulticastMessage.builder()
+                        .addAllTokens(devices.map { it.fcmToken })
+                        .putAllData(mapOf(
+                                "title" to title,
+                                "text" to text,
+                                "imageUrl" to imageUrl
+                        )).build()
+                val responses = messaging.sendMulticast(message).responses
+                LOGGER.info(responses.map { "Response: ${it.messageId} is successful: ${it.isSuccessful}" }.toString())
+            }
         }
     }
 }

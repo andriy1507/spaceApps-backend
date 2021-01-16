@@ -52,10 +52,6 @@ class AuthorizationServiceImpl constructor(
     }
 
     override fun addDeviceToken(token: String, user: ApplicationUser) {
-        devicesRepository.save(UserDeviceDao(fcmToken = token, userId = user.id)).also {
-            LOGGER.debug("USER DEVICE: $it")
-            val newUser = user.copy().apply { devices.add(it) }
-            userRepository.save(newUser)
-        }
+        devicesRepository.save(UserDeviceDao(fcmToken = token, userId = user.id))
     }
 }

@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository
 @Repository
 interface UserDevicesRepository : CrudRepository<UserDeviceDao, Long> {
 
+    fun getAllByUserId(userId:Long):List<UserDeviceDao>
+
 }

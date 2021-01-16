@@ -10,6 +10,6 @@ data class UserDeviceDao(
         var id: Long = 0,
         @Column(name = "applicationUserId")
         var userId: Long = 0,
-        @Column(name = "fcmToken")
+        @Column(name = "fcmToken", unique = true)
         var fcmToken: String = ""
 )
