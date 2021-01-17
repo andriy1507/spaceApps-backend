@@ -7,10 +7,10 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.Message
 import com.google.firebase.messaging.MulticastMessage
 import com.spaceapps.backend.config.FcmProperties
+import com.spaceapps.backend.model.dto.PushNotificationRequest
 import com.spaceapps.backend.repositories.ApplicationUserRepository
 import com.spaceapps.backend.repositories.UserDevicesRepository
 import com.spaceapps.backend.services.PushNotificationService
-import com.spaceapps.backend.utils.LOGGER
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.io.FileInputStream
@@ -48,19 +48,17 @@ class PushNotificationServiceImpl @Autowired constructor(
         messaging.send(message)
     }
 
-    override fun sendToUser(title: String?, text: String, imageUrl: String?, userName: String) {
+    override fun sendToUser(notification: PushNotificationRequest, userName: String) {
         userRepository.getByUserName(userName)?.let { user ->
             devicesRepository.getAllByUserId(user.id).let { devices ->
-                LOGGER.info("${userName}\'s devices: $devices")
                 val message = MulticastMessage.builder()
                         .addAllTokens(devices.map { it.fcmToken })
                         .putAllData(mapOf(
-                                "title" to title,
-                                "text" to text,
-                                "imageUrl" to imageUrl
+                                "title" to notification.title,
+                                "text" to notification.text,
+                                "imageUrl" to notification.imageUrl.orEmpty()
                         )).build()
-                val responses = messaging.sendMulticast(message).responses
-                LOGGER.info(responses.map { "Response: ${it.messageId} is successful: ${it.isSuccessful}" }.toString())
+                messaging.sendMulticast(message)
             }
         }
     }

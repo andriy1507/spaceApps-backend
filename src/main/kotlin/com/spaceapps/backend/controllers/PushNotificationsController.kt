@@ -1,5 +1,6 @@
 package com.spaceapps.backend.controllers
 
+import com.spaceapps.backend.model.dto.PushNotificationRequest
 import com.spaceapps.backend.services.PushNotificationService
 import io.swagger.annotations.Api
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,15 +25,9 @@ class PushNotificationsController @Autowired constructor(
 
     @PostMapping("/send-to-user")
     fun sendNotificationToUser(
-            @RequestParam("title") title: String,
-            @RequestParam("text") text: String,
-            @RequestParam("user") userName: String
+            @RequestParam("user") userName: String,
+            @RequestBody notification: PushNotificationRequest
     ) {
-        pushService.sendToUser(
-                title,
-                text,
-                "",
-                userName
-        )
+        pushService.sendToUser(notification, userName)
     }
 }

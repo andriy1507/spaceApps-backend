@@ -1,5 +1,7 @@
 package com.spaceapps.backend.services
 
+import com.spaceapps.backend.model.dto.PushNotificationRequest
+
 interface PushNotificationService {
 
     fun sendSimpleNotification(
@@ -9,5 +11,5 @@ interface PushNotificationService {
             token: String
     )
 
-    fun sendToUser(title: String?, text: String, imageUrl: String?, userName: String)
+    fun sendToUser(notification: PushNotificationRequest, userName: String)
 }
