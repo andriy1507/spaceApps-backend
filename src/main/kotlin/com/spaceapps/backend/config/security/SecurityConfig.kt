@@ -46,6 +46,7 @@ class SecurityConfig @Autowired constructor(
                             "/webjars/**",
                             "/graphql",
                             "/socket",
+                            "/echo-socket",
                             "/"
                     )
                     .permitAll()
