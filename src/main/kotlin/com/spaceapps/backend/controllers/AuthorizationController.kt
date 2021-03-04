@@ -2,6 +2,7 @@ package com.spaceapps.backend.controllers
 
 import com.spaceapps.backend.model.dao.ApplicationUser
 import com.spaceapps.backend.model.dto.AuthRequestDto
+import com.spaceapps.backend.model.dto.AuthRequestDto.UserDeviceDto
 import com.spaceapps.backend.model.exceptions.UsernameExistsException
 import com.spaceapps.backend.repositories.ApplicationUserRepository
 import com.spaceapps.backend.services.AuthorizationService
@@ -66,10 +67,10 @@ class AuthorizationController constructor(
         }
     }
 
-    @PutMapping("/fcm-token/{token}")
-    fun addDeviceFcmToken(@PathVariable token: String):ResponseEntity<Unit> {
+    @PutMapping("/device")
+    fun addDeviceFcmToken(@RequestBody device: UserDeviceDto): ResponseEntity<Unit> {
         return (SecurityContextHolder.getContext().authentication.principal as? ApplicationUser)?.let {
-            authorizationService.addDeviceToken(token, it)
+            authorizationService.addDeviceToken(device.token, it)
             ResponseEntity.ok().build()
         } ?: ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
     }
