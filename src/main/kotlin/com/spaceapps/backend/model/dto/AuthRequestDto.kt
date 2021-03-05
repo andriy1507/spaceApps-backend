@@ -16,11 +16,11 @@ data class AuthRequestDto(
             @SerializedName("platform")
             val platform: Platform
     ) {
-        enum class Platform {
+        enum class Platform(val value:String) {
             @SerializedName("android")
-            Android,
+            Android("android"),
             @SerializedName("ios")
-            Ios
+            Ios("ios")
         }
     }
 }

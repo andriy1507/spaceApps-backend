@@ -3,6 +3,8 @@ package com.spaceapps.backend.services.impl
 import com.spaceapps.backend.config.security.token.AuthTokenProvider
 import com.spaceapps.backend.model.dao.ApplicationUser
 import com.spaceapps.backend.model.dao.UserDeviceDao
+import com.spaceapps.backend.model.dto.AuthRequestDto
+import com.spaceapps.backend.model.dto.AuthRequestDto.*
 import com.spaceapps.backend.model.dto.AuthTokenDto
 import com.spaceapps.backend.model.exceptions.UsernameExistsException
 import com.spaceapps.backend.repositories.ApplicationUserRepository
@@ -22,9 +24,10 @@ class AuthorizationServiceImpl constructor(
         private val tokenProvider: AuthTokenProvider
 ) : AuthorizationService {
 
-    override fun signInUserNamePassword(userName: String, password: String): AuthTokenDto {
+    override fun signInUserNamePassword(userName: String, password: String, device: UserDeviceDto): AuthTokenDto {
         return userRepository.getByUserName(userName)?.let { user ->
             if (passwordEncoder.matches(password, user.pass)) {
+                addDeviceToken(device, user)
                 tokenProvider.getAuthTokenDto(user)
             } else {
                 throw CredentialException("Wrong password for user $userName")
@@ -32,9 +35,10 @@ class AuthorizationServiceImpl constructor(
         } ?: throw UsernameNotFoundException("User with name $userName does not exists")
     }
 
-    override fun signUpUserNamePassword(userName: String, password: String): AuthTokenDto {
+    override fun signUpUserNamePassword(userName: String, password: String, device: UserDeviceDto): AuthTokenDto {
         return try {
             val user = userRepository.save(ApplicationUser(userName = userName, pass = passwordEncoder.encode(password)))
+            addDeviceToken(device, user)
             tokenProvider.getAuthTokenDto(user)
         } catch (e: Exception) {
             LOGGER.error(e.localizedMessage)
@@ -51,7 +55,11 @@ class AuthorizationServiceImpl constructor(
         } ?: throw Exception("Refresh token is not valid")
     }
 
-    override fun addDeviceToken(token: String, user: ApplicationUser) {
-        devicesRepository.save(UserDeviceDao(fcmToken = token, userId = user.id))
+    override fun addDeviceToken(device: UserDeviceDto, user: ApplicationUser) {
+        userRepository.getByUserName(user.userName)?.let {
+            val deviceDao = devicesRepository.save(UserDeviceDao(fcmToken = device.token, userId = user.id, platform = device.platform.value))
+            it.devices.add(deviceDao)
+            userRepository.save(it)
+        }
     }
 }

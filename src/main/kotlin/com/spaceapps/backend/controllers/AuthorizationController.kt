@@ -38,7 +38,7 @@ class AuthorizationController constructor(
     @ApiOperation("Returns access and refresh tokens")
     fun singInWithUserNameAndPassword(@RequestBody request:AuthRequestDto): ResponseEntity<*> {
         return try {
-            ResponseEntity.ok(authorizationService.signInUserNamePassword(request.email, request.password))
+            ResponseEntity.ok(authorizationService.signInUserNamePassword(request.email, request.password, request.device))
         } catch (e: Exception) {
             ResponseEntity.badRequest().body(e)
         }
@@ -49,7 +49,7 @@ class AuthorizationController constructor(
     @ApiOperation("Creates new user and returns access and refresh tokens")
     fun signUpWithUserNameAndPassword(@RequestBody request:AuthRequestDto): ResponseEntity<*> {
         return try {
-            val token = authorizationService.signUpUserNamePassword(request.email, request.password)
+            val token = authorizationService.signUpUserNamePassword(request.email, request.password, request.device)
             ResponseEntity.ok(token)
         } catch (e: UsernameExistsException) {
             ResponseEntity.badRequest().body(e.localizedMessage)
@@ -70,7 +70,7 @@ class AuthorizationController constructor(
     @PutMapping("/device")
     fun addDeviceFcmToken(@RequestBody device: UserDeviceDto): ResponseEntity<Unit> {
         return (SecurityContextHolder.getContext().authentication.principal as? ApplicationUser)?.let {
-            authorizationService.addDeviceToken(device.token, it)
+            authorizationService.addDeviceToken(device, it)
             ResponseEntity.ok().build()
         } ?: ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
     }
