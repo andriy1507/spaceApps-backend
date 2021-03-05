@@ -14,5 +14,5 @@ data class UserDeviceDao(
         @Column(name = "applicationUserId")
         var userId: Long = 0,
         @Column(name = "platform")
-        var platform: String
+        var platform: String = ""
 )
