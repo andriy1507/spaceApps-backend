@@ -2,24 +2,15 @@ package com.spaceapps.backend.config
 
 import com.spaceapps.backend.socket.TestWebSocketHandler
 import org.springframework.context.annotation.Configuration
-import org.springframework.messaging.simp.config.MessageBrokerRegistry
-import org.springframework.web.socket.config.annotation.*
+import org.springframework.web.socket.config.annotation.EnableWebSocket
+import org.springframework.web.socket.config.annotation.WebSocketConfigurer
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 
 @Configuration
 @EnableWebSocket
-@EnableWebSocketMessageBroker
-class WebSocketConfig : WebSocketMessageBrokerConfigurer, WebSocketConfigurer {
-    override fun registerStompEndpoints(registry: StompEndpointRegistry) {
-        registry.addEndpoint("/socket").setAllowedOrigins("*")
-    }
-
-    override fun configureMessageBroker(registry: MessageBrokerRegistry) {
-        registry.enableSimpleBroker("/topic")
-        registry.setApplicationDestinationPrefixes("/app")
-    }
+class WebSocketConfig : WebSocketConfigurer {
 
     override fun registerWebSocketHandlers(registry: WebSocketHandlerRegistry) {
-        registry.addHandler(TestWebSocketHandler(),"/echo-socket")
-        registry.addHandler(TestWebSocketHandler(),"/echo-secure-socket")
+        registry.addHandler(TestWebSocketHandler(), "/echo-socket")
     }
 }

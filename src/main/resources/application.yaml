@@ -1,21 +1,4 @@
 spring:
-    mvc:
-        converters:
-            preferred-json-mapper: gson
-    gson:
-        pretty-printing: true
-        serialize-nulls: false
-    task:
-        scheduling:
-            pool:
-                size: 10
-            shutdown:
-                await-termination: true
-            thread-name-prefix: scheduledTaskExecutor
-    servlet:
-        multipart:
-            max-file-size: 10MB
-            max-request-size: 10MB
     jpa:
         hibernate:
             ddl-auto: update
@@ -25,10 +8,4 @@ spring:
         url: 'jdbc:postgresql://ec2-52-30-161-203.eu-west-1.compute.amazonaws.com:5432/d31necqj0jdkfd'
         username: 'citilsprqeawyr'
         password: '85a60dfa388dc909f5f5bbb5df0bde6cde19bf625cce893f258f213ac30da967'
-auth:
-    token:
-        secret-key: 'K%hM3+3eX6-^tL*BhDYya@V!53aSBH!q'
-fcm:
-    service-account-file: 'spaceapps-5465e-firebase-adminsdk-lbob1-56b40c1145.json'
-    database-url: 'https://spaceapps-5465e.firebaseio.com'
 
