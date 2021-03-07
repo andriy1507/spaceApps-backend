@@ -1,9 +1,7 @@
 package com.spaceapps.backend.config
 
-import com.spaceapps.backend.model.dto.auth.AuthorizationTokenResponse
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import org.springframework.http.ResponseEntity
 import springfox.documentation.builders.PathSelectors
 import springfox.documentation.builders.RequestHandlerSelectors
 import springfox.documentation.spi.DocumentationType
@@ -21,6 +19,5 @@ class SwaggerConfig {
             .apis(RequestHandlerSelectors.basePackage("com.spaceapps.backend.controller"))
             .paths(PathSelectors.any())
             .build()
-            .directModelSubstitute(ResponseEntity::class.java, AuthorizationTokenResponse::class.java)
     }
 }

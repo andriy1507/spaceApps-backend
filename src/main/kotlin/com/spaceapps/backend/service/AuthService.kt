@@ -1,12 +1,19 @@
 package com.spaceapps.backend.service
 
+import com.spaceapps.backend.model.dao.ApplicationUser
 import com.spaceapps.backend.model.dto.auth.*
+import com.spaceapps.backend.repository.DevicesRepository
+import com.spaceapps.backend.repository.UserRepository
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 
 @Service
-class AuthService {
+class AuthService @Autowired constructor(
+    private val userRepository: UserRepository,
+    private val deviceRepository: DevicesRepository
+) {
 
     fun signIn(request: AuthorizationRequest): ResponseEntity<*> {
         return ResponseEntity.ok(
@@ -17,6 +24,7 @@ class AuthService {
                 LocalDateTime.now()
             )
         )
+
     }
 
     fun signUp(request: AuthorizationRequest): ResponseEntity<*> {
@@ -74,11 +82,11 @@ class AuthService {
         )
     }
 
-    fun addDevice(request: DeviceRequest): ResponseEntity<*> {
+    fun addDevice(request: DeviceRequest, user: ApplicationUser): ResponseEntity<*> {
         return ResponseEntity.ok(Unit)
     }
 
-    fun logOut(request: DeviceRequest): ResponseEntity<*> {
+    fun logOut(request: DeviceRequest, user: ApplicationUser): ResponseEntity<*> {
         return ResponseEntity.ok(Unit)
     }
 
