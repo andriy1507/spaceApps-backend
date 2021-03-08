@@ -1,16 +1,18 @@
 package com.spaceapps.backend.utils
 
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.spaceapps.backend.model.dao.ApplicationUser
+import com.spaceapps.backend.model.dao.auth.UserEntity
 import com.spaceapps.backend.model.dto.auth.AuthorizationRequest
 import com.spaceapps.backend.model.dto.auth.AuthorizationTokenResponse
+import io.jsonwebtoken.IncorrectClaimException
 import io.jsonwebtoken.Jwts
-import io.jsonwebtoken.SignatureAlgorithm
+import io.jsonwebtoken.MissingClaimException
 import io.jsonwebtoken.jackson.io.JacksonSerializer
 import io.jsonwebtoken.security.Keys
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.*
+import kotlin.jvm.Throws
 
 object JsonWebTokenUtils {
 
@@ -20,11 +22,23 @@ object JsonWebTokenUtils {
     private const val ISSUER = "spaceapps.com"
     private const val USER_NAME = "user_name"
     private const val USER_ID = "user_id"
+    private val SIGN_SECRET = "15ab0c7de1f9gh9815ab0c7de1f9gh9815ab0c7de1f9gh98".toByteArray()
 
-    fun generateAuthTokenResponse(user: ApplicationUser, request: AuthorizationRequest): AuthorizationTokenResponse {
+    @Throws(MissingClaimException::class, IncorrectClaimException::class)
+    fun validateAuthorizationToken(token: String):String? {
+        val claims = Jwts.parserBuilder()
+            .setSigningKey(SIGN_SECRET)
+            .build()
+            .parseClaimsJws(token)
+        if (claims.body.expiration.before(Date())) return null
+        if (claims.body.get(TOKEN_TYPE, TokenType::class.java) != TokenType.Authorization) return null
+        return claims.body.subject
+    }
+
+    fun generateAuthTokenResponse(user: UserEntity, request: AuthorizationRequest): AuthorizationTokenResponse {
         val now = LocalDateTime.now()
-        val keys = Keys.secretKeyFor(SignatureAlgorithm.HS256)
-        val jwtBuilder = Jwts.builder().signWith(keys)
+        val jwtBuilder = Jwts.builder()
+            .signWith(Keys.hmacShaKeyFor(SIGN_SECRET))
             .setSubject(user.email)
             .setIssuer(ISSUER)
             .setClaims(mapOf<String, Any>(

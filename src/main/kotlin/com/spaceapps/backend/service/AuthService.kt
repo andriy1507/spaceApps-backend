@@ -1,7 +1,7 @@
 package com.spaceapps.backend.service
 
 import com.spaceapps.backend.*
-import com.spaceapps.backend.model.dao.ApplicationUser
+import com.spaceapps.backend.model.dao.auth.UserEntity
 import com.spaceapps.backend.model.dto.auth.*
 import com.spaceapps.backend.repository.DevicesRepository
 import com.spaceapps.backend.repository.UserRepository
@@ -34,7 +34,7 @@ class AuthService @Autowired constructor(
         if (!request.email.isEmail) return ResponseEntity.badRequest().body(EMAIL_NOT_VALID)
         if (!request.password.isPassword) return ResponseEntity.badRequest().body(PASSWORD_NOT_VALID)
         if (userRepository.existsByEmail(request.email)) return ResponseEntity.badRequest().body(USER_ALREADY_EXISTS)
-        val user = userRepository.save(ApplicationUser(email = request.email, password = passwordEncoder.encode(request.password)))
+        val user = userRepository.save(UserEntity(email = request.email, password = passwordEncoder.encode(request.password)))
         return ResponseEntity.ok(JsonWebTokenUtils.generateAuthTokenResponse(user, request))
     }
 

@@ -1,10 +1,10 @@
-package com.spaceapps.backend.model.dao
+package com.spaceapps.backend.model.dao.auth
 
 import javax.persistence.*
 
 @Entity
 @Table(name = "users")
-data class ApplicationUser(
+data class UserEntity(
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -14,6 +14,7 @@ data class ApplicationUser(
     @Column(name = "user_password")
     var password: String = ""
 ) {
-    @OneToMany(targetEntity = UserDevice::class, fetch = FetchType.EAGER, orphanRemoval = true, cascade = [CascadeType.ALL])
-    val devices: MutableList<UserDevice> = mutableListOf()
+    @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
+    @JoinColumn(name = "device_user_id")
+    val devices: MutableList<DeviceEntity> = mutableListOf()
 }
