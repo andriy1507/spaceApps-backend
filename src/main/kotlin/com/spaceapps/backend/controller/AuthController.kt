@@ -1,16 +1,11 @@
 package com.spaceapps.backend.controller
 
-import com.spaceapps.backend.UNAUTHORIZED
-import com.spaceapps.backend.model.dao.ApplicationUser
 import com.spaceapps.backend.model.dto.auth.*
 import com.spaceapps.backend.service.AuthService
 import io.swagger.annotations.Api
-import io.swagger.annotations.ApiImplicitParam
 import io.swagger.annotations.ApiOperation
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -80,22 +75,12 @@ class AuthController @Autowired constructor(
     @PostMapping("/add-device")
     @ApiOperation("Adds new user device")
     fun addDevice(@RequestBody request: DeviceRequest): ResponseEntity<*> {
-        val principal = SecurityContextHolder.getContext().authentication.principal
-        return if (principal != null && principal is ApplicationUser) {
-            authService.addDevice(request, principal)
-        } else {
-            ResponseEntity.status(HttpStatus.UNAUTHORIZED.value()).body(UNAUTHORIZED)
-        }
+        return authService.addDevice(request)
     }
 
     @PostMapping("/log-out")
     @ApiOperation("Removes user device")
     fun logOut(@RequestBody request: DeviceRequest): ResponseEntity<*> {
-        val principal = SecurityContextHolder.getContext().authentication.principal
-        return if (principal != null && principal is ApplicationUser) {
-            authService.logOut(request, principal)
-        } else {
-            ResponseEntity.status(HttpStatus.UNAUTHORIZED.value()).body(UNAUTHORIZED)
-        }
+        return authService.logOut(request)
     }
 }

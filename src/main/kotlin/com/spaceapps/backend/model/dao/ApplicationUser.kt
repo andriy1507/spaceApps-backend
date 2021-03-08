@@ -8,12 +8,12 @@ data class ApplicationUser(
     @Id
     @Column(name = "user_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long = 0,
+    var id: Int = 0,
     @Column(name = "user_email")
     var email: String = "",
     @Column(name = "user_password")
     var password: String = ""
 ) {
-    @OneToMany(targetEntity = UserDevice::class, fetch = FetchType.EAGER)
+    @OneToMany(targetEntity = UserDevice::class, fetch = FetchType.EAGER, orphanRemoval = true, cascade = [CascadeType.ALL])
     val devices: MutableList<UserDevice> = mutableListOf()
 }

@@ -8,9 +8,11 @@ data class UserDevice(
     @Id
     @Column(name = "device_id")
     @GeneratedValue(strategy = GenerationType.AUTO)
-    var id: Long = 0,
+    var id: Int = 0,
     @Column(name = "device_token")
     var token: String = "",
     @Column(name = "device_user_id")
-    var userId: Int = 0
+    var userId: Int = 0,
+    @Column(name = "device_platform")
+    var platform:String = ""
 )

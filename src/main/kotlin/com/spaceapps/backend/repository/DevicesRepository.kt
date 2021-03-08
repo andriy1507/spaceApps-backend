@@ -5,8 +5,10 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface DevicesRepository : CrudRepository<UserDevice, Long> {
+interface DevicesRepository : CrudRepository<UserDevice, Int> {
 
     fun deleteByToken(token: String)
+
+    fun findByToken(token: String): UserDevice?
 
 }

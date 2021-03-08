@@ -5,10 +5,10 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface UserRepository : CrudRepository<ApplicationUser, Long> {
+interface UserRepository : CrudRepository<ApplicationUser, Int> {
 
     fun existsByEmail(email: String): Boolean
 
-    fun getByEmail(email: String): ApplicationUser
+    fun getByEmail(email: String): ApplicationUser?
 
 }
