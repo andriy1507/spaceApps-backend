@@ -6,10 +6,7 @@ import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @Api(tags = ["Authorization"], description = "Authorization endpoints")
@@ -66,7 +63,7 @@ class AuthController @Autowired constructor(
         return authService.verifyResetToken(request)
     }
 
-    @PostMapping("/reset-password")
+    @PutMapping("/reset-password")
     @ApiOperation("Sets new password by received code")
     fun resetPassword(@RequestBody request: ResetPasswordRequest): ResponseEntity<*> {
         return authService.resetPassword(request)
@@ -78,7 +75,7 @@ class AuthController @Autowired constructor(
         return authService.addDevice(request)
     }
 
-    @PostMapping("/log-out")
+    @DeleteMapping("/log-out")
     @ApiOperation("Removes user device")
     fun logOut(@RequestBody request: DeviceRequest): ResponseEntity<*> {
         return authService.logOut(request)
