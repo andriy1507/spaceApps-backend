@@ -2,7 +2,6 @@ package com.spaceapps.backend.service
 
 import com.spaceapps.backend.*
 import com.spaceapps.backend.model.dao.ApplicationUser
-import com.spaceapps.backend.model.dao.UserDevice
 import com.spaceapps.backend.model.dto.auth.*
 import com.spaceapps.backend.repository.DevicesRepository
 import com.spaceapps.backend.repository.UserRepository
@@ -28,7 +27,7 @@ class AuthService @Autowired constructor(
         val user = userRepository.getByEmail(request.email)
         user ?: return ResponseEntity.badRequest().body(USER_DOES_NOT_EXISTS)
         if (!passwordEncoder.matches(request.password, user.password)) return ResponseEntity.badRequest().body(WRONG_PASSWORD)
-        return ResponseEntity.ok(JsonWebTokenUtils.generateAuthTokenResponse(user))
+        return ResponseEntity.ok(JsonWebTokenUtils.generateAuthTokenResponse(user, request))
     }
 
     fun signUp(request: AuthorizationRequest): ResponseEntity<*> {
@@ -36,7 +35,7 @@ class AuthService @Autowired constructor(
         if (!request.password.isPassword) return ResponseEntity.badRequest().body(PASSWORD_NOT_VALID)
         if (userRepository.existsByEmail(request.email)) return ResponseEntity.badRequest().body(USER_ALREADY_EXISTS)
         val user = userRepository.save(ApplicationUser(email = request.email, password = passwordEncoder.encode(request.password)))
-        return ResponseEntity.ok(JsonWebTokenUtils.generateAuthTokenResponse(user))
+        return ResponseEntity.ok(JsonWebTokenUtils.generateAuthTokenResponse(user, request))
     }
 
     fun refreshToken(request: RefreshTokenRequest): ResponseEntity<*> {
