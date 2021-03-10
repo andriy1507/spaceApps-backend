@@ -75,7 +75,7 @@ class AuthController @Autowired constructor(
         return authService.addDevice(request)
     }
 
-    @DeleteMapping("/log-out")
+    @PostMapping("/log-out")
     @ApiOperation("Removes user device")
     fun logOut(@RequestBody request: DeviceRequest): ResponseEntity<*> {
         return authService.logOut(request)
