@@ -2,8 +2,8 @@ package com.spaceapps.backend.utils
 
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.spaceapps.backend.model.dao.auth.UserEntity
-import com.spaceapps.backend.model.dto.auth.AuthorizationRequest
 import com.spaceapps.backend.model.dto.auth.AuthorizationTokenResponse
+import com.spaceapps.backend.model.dto.auth.DeviceRequest
 import io.jsonwebtoken.IncorrectClaimException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.MissingClaimException
@@ -12,7 +12,6 @@ import io.jsonwebtoken.security.Keys
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.util.*
-import kotlin.jvm.Throws
 
 object JsonWebTokenUtils {
 
@@ -22,6 +21,7 @@ object JsonWebTokenUtils {
     private const val ISSUER = "spaceapps.com"
     private const val USER_NAME = "user_name"
     private const val USER_ID = "user_id"
+    private const val USER_TYPE = "user_type"
     private val SIGN_SECRET = "15ab0c7de1f9gh9815ab0c7de1f9gh9815ab0c7de1f9gh98".toByteArray()
 
     @Throws(MissingClaimException::class, IncorrectClaimException::class)
@@ -35,18 +35,21 @@ object JsonWebTokenUtils {
         return claims.body.subject
     }
 
-    fun generateAuthTokenResponse(user: UserEntity, request: AuthorizationRequest): AuthorizationTokenResponse {
+    fun generateAuthTokenResponse(user: UserEntity, device: DeviceRequest): AuthorizationTokenResponse {
         val now = LocalDateTime.now()
         val jwtBuilder = Jwts.builder()
             .signWith(Keys.hmacShaKeyFor(SIGN_SECRET))
             .setSubject(user.email)
             .setIssuer(ISSUER)
-            .setClaims(mapOf<String, Any>(
-                DEVICE_TOKEN to request.device.token,
-                PLATFORM to request.device.platform,
-                USER_NAME to user.email,
-                USER_ID to user.id
-            ))
+            .setClaims(
+                mapOf(
+                    DEVICE_TOKEN to device.token,
+                    PLATFORM to device.platform,
+                    USER_NAME to user.email,
+                    USER_ID to user.id,
+                    USER_TYPE to user
+                )
+            )
             .setIssuedAt(Date.from(now.toInstant(ZoneOffset.UTC)))
             .serializeToJsonWith(JacksonSerializer())
         val authExp = now.plusDays(1)

@@ -12,7 +12,9 @@ data class UserEntity(
     @Column(name = "user_email")
     var email: String = "",
     @Column(name = "user_password")
-    var password: String = ""
+    var password: String = "",
+    @Column(name = "user_type")
+    var type: UserType = UserType.SpaceApps
 ) {
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     @JoinColumn(name = "device_user_id")

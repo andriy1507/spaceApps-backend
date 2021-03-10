@@ -28,6 +28,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+//    Spring Cloud
+    implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 //    PostgreSQL
     implementation("org.postgresql:postgresql:42.2.18")
 //    Swagger
@@ -40,6 +42,12 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.2")
 }
 
+
+dependencyManagement {
+    imports {
+        mavenBom("org.springframework.cloud:spring-cloud-dependencies:Hoxton.SR8")
+    }
+}
 
 tasks.withType<Test> {
     useJUnitPlatform()
