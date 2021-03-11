@@ -3,6 +3,7 @@ package com.spaceapps.backend.controller
 import com.spaceapps.backend.model.dto.auth.*
 import com.spaceapps.backend.service.AuthService
 import io.swagger.annotations.Api
+import io.swagger.annotations.ApiImplicitParam
 import io.swagger.annotations.ApiOperation
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
@@ -71,12 +72,26 @@ class AuthController @Autowired constructor(
 
     @PostMapping("/add-device")
     @ApiOperation("Adds new user device")
+    @ApiImplicitParam(
+        name = "Authorization",
+        value = "Access token",
+        paramType = "header",
+        dataTypeClass = String::class,
+        required = true
+    )
     fun addDevice(@RequestBody request: DeviceRequest): ResponseEntity<*> {
         return authService.addDevice(request)
     }
 
     @PostMapping("/log-out")
     @ApiOperation("Removes user device")
+    @ApiImplicitParam(
+        name = "Authorization",
+        value = "Access token",
+        paramType = "header",
+        dataTypeClass = String::class,
+        required = true
+    )
     fun logOut(@RequestBody request: DeviceRequest): ResponseEntity<*> {
         return authService.logOut(request)
     }
