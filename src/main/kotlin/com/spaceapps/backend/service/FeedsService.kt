@@ -9,6 +9,8 @@ import com.spaceapps.backend.model.dto.feeds.FeedResponse
 import com.spaceapps.backend.repository.FeedsRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
 @Service
@@ -55,6 +57,10 @@ class FeedsService @Autowired constructor(
 
     fun deleteFeed(feedId: Int) {
         feedsRepository.deleteById(feedId)
+    }
+
+    fun toggleLikeForFeed(feedId: Int): ResponseEntity<*> {
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(null)
     }
 
 }

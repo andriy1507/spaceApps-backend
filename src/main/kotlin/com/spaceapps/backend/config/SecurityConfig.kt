@@ -20,6 +20,7 @@ class SecurityConfig @Autowired constructor(
 
     override fun configure(http: HttpSecurity) {
         http.cors().and().csrf().disable()
+            .addFilterBefore(authorizationTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
             .authorizeRequests()
             .antMatchers("/auth/**").permitAll()
             .antMatchers("/feeds/**").permitAll()
@@ -32,8 +33,7 @@ class SecurityConfig @Autowired constructor(
             ).permitAll()
             .antMatchers("/actuator/**").permitAll()
             .anyRequest().authenticated()
-            .and().addFilterBefore(authorizationTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and().exceptionHandling().authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
     }
 

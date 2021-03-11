@@ -18,7 +18,6 @@ class SwaggerConfig {
     fun swaggerConfiguration(): Docket {
         return Docket(DocumentationType.SWAGGER_2)
             .securitySchemes(listOf(ApiKey(HttpHeaders.AUTHORIZATION, "Bearer token", "header")))
-            .host("https://spaceapps.com")
             .select()
             .apis(RequestHandlerSelectors.basePackage("com.spaceapps.backend.controller"))
             .paths(PathSelectors.any())

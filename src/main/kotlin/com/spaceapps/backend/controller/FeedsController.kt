@@ -10,6 +10,7 @@ import io.swagger.annotations.ApiOperation
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -19,7 +20,7 @@ class FeedsController(
     private val feedsService: FeedsService
 ) {
 
-    @GetMapping("")
+    @GetMapping
     @ApiOperation("Returns paginated feeds")
     @ApiImplicitParam(
         name = "Authorization",
@@ -84,5 +85,79 @@ class FeedsController(
     fun deleteFeed(@PathVariable feedId: Int) {
         feedsService.deleteFeed(feedId)
     }
+
+    @PatchMapping("/like/{feedId}")
+    @ApiOperation("Toggles like for feed by ID")
+    @ApiImplicitParam(
+        name = "Authorization",
+        value = "Access token",
+        paramType = "header",
+        dataTypeClass = String::class,
+        required = true
+    )
+    fun toggleFeedLike(@PathVariable("feedId") feedId: Int): ResponseEntity<*> {
+        return feedsService.toggleLikeForFeed(feedId)
+    }
+
+    @PostMapping("/comments/create/{feedId}")
+    @ApiOperation("Creates comment for feed by ID")
+    @ApiImplicitParam(
+        name = "Authorization",
+        value = "Access token",
+        paramType = "header",
+        dataTypeClass = String::class,
+        required = true
+    )
+    fun createComment(@PathVariable("feedId") feedId: Int) = Unit
+
+    @GetMapping("/comments/{feedId}")
+    @ApiOperation("Returns paginated comments for feed by ID")
+    @ApiImplicitParam(
+        name = "Authorization",
+        value = "Access token",
+        paramType = "header",
+        dataTypeClass = String::class,
+        required = true
+    )
+    fun getCommentsPaginated(
+        @PageableDefault(
+            size = 20,
+            page = 0
+        ) pageable: Pageable,
+        @PathVariable("feedId") feedId: Int
+    ) = Unit
+
+    @PutMapping("/comments/update/{commentId}")
+    @ApiOperation("Updates comment by ID")
+    @ApiImplicitParam(
+        name = "Authorization",
+        value = "Access token",
+        paramType = "header",
+        dataTypeClass = String::class,
+        required = true
+    )
+    fun updateComment(@PathVariable("commentId") commentId: Int) = Unit
+
+    @DeleteMapping("/comments/delete/{commentId}")
+    @ApiOperation("Deletes comment by ID")
+    @ApiImplicitParam(
+        name = "Authorization",
+        value = "Access token",
+        paramType = "header",
+        dataTypeClass = String::class,
+        required = true
+    )
+    fun deleteComment(@PathVariable("commentId") commentId: Int) = Unit
+
+    @PatchMapping("/comments/like/{commentId}")
+    @ApiOperation("Toggles like for comment by ID")
+    @ApiImplicitParam(
+        name = "Authorization",
+        value = "Access token",
+        paramType = "header",
+        dataTypeClass = String::class,
+        required = true
+    )
+    fun toggleCommentLike(@PathVariable("commentId") commentId: Int) = Unit
 
 }
