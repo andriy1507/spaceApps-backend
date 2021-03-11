@@ -120,10 +120,7 @@ class FeedsController(
         required = true
     )
     fun getCommentsPaginated(
-        @PageableDefault(
-            size = 20,
-            page = 0
-        ) pageable: Pageable,
+        @PageableDefault(size = 20, page = 0) pageable: Pageable,
         @PathVariable("feedId") feedId: Int
     ) = Unit
 
