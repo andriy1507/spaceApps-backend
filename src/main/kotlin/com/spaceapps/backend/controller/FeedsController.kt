@@ -47,6 +47,19 @@ class FeedsController(
         return feedsService.getFeeds(search, pageable)
     }
 
+    @GetMapping("/{feedId}")
+    @ApiOperation("Returns single feed by ID")
+    @ApiImplicitParam(
+        name = "Authorization",
+        value = "Access token",
+        paramType = "header",
+        dataTypeClass = String::class,
+        required = true
+    )
+    fun getSingleFeed(@PathVariable("feedId") feedId: Int): ResponseEntity<*> {
+        return feedsService.getSingleFeed(feedId)
+    }
+
     @PostMapping("/create")
     @ApiOperation("Creates new feed")
     @ApiImplicitParam(
@@ -69,8 +82,8 @@ class FeedsController(
         dataTypeClass = String::class,
         required = true
     )
-    fun updateFeed(@PathVariable feedId: Int, @RequestBody request: FeedRequest) {
-        feedsService.updateFeed(feedId, request)
+    fun updateFeed(@PathVariable feedId: Int, @RequestBody request: FeedRequest): ResponseEntity<*> {
+        return feedsService.updateFeed(feedId, request)
     }
 
     @DeleteMapping("/delete/{feedId}")

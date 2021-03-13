@@ -1,5 +1,6 @@
 package com.spaceapps.backend.model.dao.auth
 
+import com.spaceapps.backend.model.dto.auth.UserType
 import javax.persistence.*
 
 @Entity

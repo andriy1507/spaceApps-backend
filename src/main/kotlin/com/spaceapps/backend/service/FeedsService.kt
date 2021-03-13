@@ -1,5 +1,6 @@
 package com.spaceapps.backend.service
 
+import com.spaceapps.backend.INCORRECT_FEED_ID
 import com.spaceapps.backend.model.dao.feeds.FeedEntity
 import com.spaceapps.backend.model.dao.feeds.FeedItemEntity
 import com.spaceapps.backend.model.dto.PaginationResponse
@@ -18,15 +19,19 @@ class FeedsService @Autowired constructor(
     private val feedsRepository: FeedsRepository
 ) {
 
+    fun getSingleFeed(feedId: Int): ResponseEntity<*> {
+        val entity = feedsRepository.findById(feedId)
+        return if (entity.isPresent) {
+            ResponseEntity.ok(mapFeedEntityToResponse(entity.get()))
+        } else {
+            ResponseEntity.badRequest().body(INCORRECT_FEED_ID)
+        }
+    }
+
     fun getFeeds(search: String, pageable: Pageable): PaginationResponse<FeedResponse> {
         val page = feedsRepository.findAllByTitleContains(search, pageable)
         return PaginationResponse(
-            data = page.content.map { entity ->
-                FeedResponse(
-                    id = entity.id,
-                    title = entity.title,
-                    items = entity.items.map { FeedItemDto(text = it.text) })
-            },
+            data = page.content.map(::mapFeedEntityToResponse),
             page = page.number,
             total = page.totalElements,
             isLast = page.isLast
@@ -34,24 +39,24 @@ class FeedsService @Autowired constructor(
     }
 
     fun createFeed(request: FeedRequest): FeedResponse {
-        val feed = feedsRepository.save(
+        val entity = feedsRepository.save(
             FeedEntity(
                 title = request.title,
                 items = request.items.map { FeedItemEntity(text = it.text) }.toMutableList()
             )
         )
-        return FeedResponse(
-            id = feed.id,
-            title = feed.title,
-            items = feed.items.map { FeedItemDto(text = it.text) }
-        )
+        return mapFeedEntityToResponse(entity)
     }
 
-    fun updateFeed(feedId: Int, request: FeedRequest) {
-        feedsRepository.findById(feedId).ifPresent { feed ->
+    fun updateFeed(feedId: Int, request: FeedRequest): ResponseEntity<*> {
+        val entity = feedsRepository.findById(feedId)
+        return if (entity.isPresent) {
+            val feed = entity.get()
             feed.title = request.title
             feed.items = request.items.map { FeedItemEntity(text = it.text) }.toMutableList()
-            feedsRepository.save(feed)
+            ResponseEntity.ok(mapFeedEntityToResponse(feedsRepository.save(feed)))
+        } else {
+            ResponseEntity.badRequest().body(INCORRECT_FEED_ID)
         }
     }
 
@@ -61,6 +66,19 @@ class FeedsService @Autowired constructor(
 
     fun toggleLikeForFeed(feedId: Int): ResponseEntity<*> {
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(null)
+    }
+
+    private fun mapFeedEntityToResponse(entity: FeedEntity): FeedResponse {
+        return FeedResponse(
+            id = entity.id,
+            title = entity.title,
+            items = entity.items.map(::mapFeedItemEntityToResponse),
+            created = entity.created
+        )
+    }
+
+    private fun mapFeedItemEntityToResponse(entity: FeedItemEntity): FeedItemDto {
+        return FeedItemDto(text = entity.text)
     }
 
 }

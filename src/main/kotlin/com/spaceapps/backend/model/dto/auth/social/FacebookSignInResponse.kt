@@ -1,4 +1,4 @@
-package com.spaceapps.backend.model.dao.auth
+package com.spaceapps.backend.model.dto.auth.social
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
