@@ -25,7 +25,7 @@ object JsonWebTokenUtils {
     private val SIGN_SECRET = "15ab0c7de1f9gh9815ab0c7de1f9gh9815ab0c7de1f9gh98".toByteArray()
 
     @Throws(MissingClaimException::class, IncorrectClaimException::class)
-    fun validateAuthorizationToken(token: String):String? {
+    fun validateAuthorizationToken(token: String): String? {
         val claims = Jwts.parserBuilder()
             .setSigningKey(SIGN_SECRET)
             .build()
@@ -73,6 +73,7 @@ object JsonWebTokenUtils {
     private enum class TokenType {
         @JsonProperty("authorization")
         Authorization,
+
         @JsonProperty("refresh")
         Refresh
     }

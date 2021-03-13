@@ -10,5 +10,5 @@ data class PaginationResponse<T>(
     @JsonProperty("page")
     val page: Int,
     @JsonProperty("isLast")
-    val isLast:Boolean
+    val isLast: Boolean
 )

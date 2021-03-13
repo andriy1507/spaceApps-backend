@@ -35,7 +35,8 @@ class AuthService @Autowired constructor(
         if (!request.password.isPassword) return ResponseEntity.badRequest().body(PASSWORD_NOT_VALID)
         val user = userRepository.getByEmail(request.email)
         user ?: return ResponseEntity.badRequest().body(USER_DOES_NOT_EXISTS)
-        if (!passwordEncoder.matches(request.password, user.password)) return ResponseEntity.badRequest().body(WRONG_PASSWORD)
+        if (!passwordEncoder.matches(request.password, user.password)) return ResponseEntity.badRequest()
+            .body(WRONG_PASSWORD)
         return ResponseEntity.ok(JsonWebTokenUtils.generateAuthTokenResponse(user, request.device))
     }
 
@@ -43,7 +44,8 @@ class AuthService @Autowired constructor(
         if (!request.email.isEmail) return ResponseEntity.badRequest().body(EMAIL_NOT_VALID)
         if (!request.password.isPassword) return ResponseEntity.badRequest().body(PASSWORD_NOT_VALID)
         if (userRepository.existsByEmail(request.email)) return ResponseEntity.badRequest().body(USER_ALREADY_EXISTS)
-        val user = userRepository.save(UserEntity(email = request.email, password = passwordEncoder.encode(request.password)))
+        val user =
+            userRepository.save(UserEntity(email = request.email, password = passwordEncoder.encode(request.password)))
         return ResponseEntity.ok(JsonWebTokenUtils.generateAuthTokenResponse(user, request.device))
     }
 

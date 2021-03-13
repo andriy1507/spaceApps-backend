@@ -19,7 +19,7 @@ class FeedsService @Autowired constructor(
 ) {
 
     fun getFeeds(search: String, pageable: Pageable): PaginationResponse<FeedResponse> {
-        val page = feedsRepository.findAllByTitleLike(search, pageable)
+        val page = feedsRepository.findAllByTitleContains(search, pageable)
         return PaginationResponse(
             data = page.content.map { entity ->
                 FeedResponse(

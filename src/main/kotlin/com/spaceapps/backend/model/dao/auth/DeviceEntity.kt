@@ -12,5 +12,5 @@ data class DeviceEntity(
     @Column(name = "device_token")
     var token: String = "",
     @Column(name = "device_platform")
-    var platform:String = ""
+    var platform: String = ""
 )
