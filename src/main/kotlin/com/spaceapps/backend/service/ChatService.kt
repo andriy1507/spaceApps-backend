@@ -3,7 +3,6 @@ package com.spaceapps.backend.service
 import com.spaceapps.backend.INCORRECT_MESSAGE_ID
 import com.spaceapps.backend.model.dao.chat.ConversationEntity
 import com.spaceapps.backend.model.dao.chat.MessageEntity
-import com.spaceapps.backend.model.dto.ErrorResponse
 import com.spaceapps.backend.model.dto.PaginationResponse
 import com.spaceapps.backend.model.dto.chat.ChatConversationRequest
 import com.spaceapps.backend.model.dto.chat.ChatConversationResponse
@@ -69,10 +68,6 @@ class ChatService @Autowired constructor(
         return ResponseEntity.status(HttpStatus.OK).body(null)
     }
 
-    fun handleRestMessage(message: ChatMessageResponse) {
-
-    }
-
     private fun mapConversationEntityToResponse(entity: ConversationEntity): ChatConversationResponse {
         return ChatConversationResponse(
             conversationId = entity.id,
@@ -85,8 +80,8 @@ class ChatService @Autowired constructor(
             id = conversationId,
             name = request.name
         )
-        conversationRepository.save(entity)
-        return ResponseEntity.status(HttpStatus.OK).body(null)
+        return ResponseEntity.status(HttpStatus.OK)
+            .body(mapConversationEntityToResponse(conversationRepository.save(entity)))
     }
 
     fun getPaginatedMessagesByConversationId(
@@ -126,7 +121,7 @@ class ChatService @Autowired constructor(
             val newEntity = messageRepository.save(entity.get().copy(text = request.messageText))
             ResponseEntity.ok(mapMessageEntityToResponse(newEntity))
         } else {
-            ResponseEntity.badRequest().body(ErrorResponse(INCORRECT_MESSAGE_ID))
+            ResponseEntity.badRequest().body(INCORRECT_MESSAGE_ID)
         }
     }
 
