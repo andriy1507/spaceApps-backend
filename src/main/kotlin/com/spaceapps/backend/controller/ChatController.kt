@@ -1,16 +1,20 @@
 package com.spaceapps.backend.controller
 
+import com.spaceapps.backend.service.ChatService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiImplicitParam
 import io.swagger.annotations.ApiOperation
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@Api(tags = ["Messaging"], description = "Messaging endpoints")
-@RequestMapping("messaging")
-class MessagingController {
+@Api(tags = ["Chat"], description = "Chat endpoints")
+@RequestMapping("chat")
+class ChatController @Autowired constructor(
+    private val chatService: ChatService
+) {
 
     @GetMapping("/conversations")
     @ApiOperation("Returns paginated conversations")
