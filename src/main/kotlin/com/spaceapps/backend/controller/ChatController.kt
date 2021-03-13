@@ -82,7 +82,7 @@ class ChatController @Autowired constructor(
         return chatService.updateConversationById(conversationId, request)
     }
 
-    @GetMapping("/message/{conversationId}")
+    @GetMapping("/messages/{conversationId}")
     @ApiOperation("Returns paginated list of messages by conversation ID")
     @ApiImplicitParam(
         name = "Authorization",
@@ -103,7 +103,7 @@ class ChatController @Autowired constructor(
         return chatService.getPaginatedMessagesByConversationId(conversationId, search, pageable)
     }
 
-    @PostMapping("/message/create/{conversationId}")
+    @PostMapping("/messages/create/{conversationId}")
     @ApiOperation("Creates new message by conversation ID")
     @ApiImplicitParam(
         name = "Authorization",
@@ -119,7 +119,7 @@ class ChatController @Autowired constructor(
         return chatService.createMessageByConversationId(conversationId, request)
     }
 
-    @DeleteMapping("/message/delete/{messageId}")
+    @DeleteMapping("/messages/delete/{messageId}")
     @ApiOperation("Deletes message by message ID")
     @ApiImplicitParam(
         name = "Authorization",
@@ -132,7 +132,7 @@ class ChatController @Autowired constructor(
         return chatService.deleteMessageById(messageId)
     }
 
-    @PutMapping("/message/update/{messageId}")
+    @PutMapping("/messages/update/{messageId}")
     @ApiOperation("Updates message by message ID")
     @ApiImplicitParam(
         name = "Authorization",
