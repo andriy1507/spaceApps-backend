@@ -1,8 +1,8 @@
 package com.spaceapps.backend.controller
 
 import com.spaceapps.backend.model.dto.PaginationResponse
+import com.spaceapps.backend.model.dto.feeds.FeedFullResponse
 import com.spaceapps.backend.model.dto.feeds.FeedRequest
-import com.spaceapps.backend.model.dto.feeds.FeedResponse
 import com.spaceapps.backend.service.FeedsService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiImplicitParam
@@ -43,7 +43,7 @@ class FeedsController(
             defaultValue = ""
         )
         search: String
-    ): PaginationResponse<FeedResponse> {
+    ): PaginationResponse<*> {
         return feedsService.getFeeds(search, pageable)
     }
 
@@ -69,7 +69,7 @@ class FeedsController(
         dataTypeClass = String::class,
         required = true
     )
-    fun postFeed(@RequestBody request: FeedRequest): FeedResponse {
+    fun postFeed(@RequestBody request: FeedRequest): FeedFullResponse {
         return feedsService.createFeed(request)
     }
 

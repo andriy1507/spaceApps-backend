@@ -3,7 +3,7 @@ package com.spaceapps.backend.model.dto.feeds
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDateTime
 
-data class FeedResponse(
+data class FeedFullResponse(
     @JsonProperty("id")
     val id: Int,
     @JsonProperty("title")

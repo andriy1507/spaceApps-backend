@@ -4,9 +4,10 @@ import com.spaceapps.backend.INCORRECT_FEED_ID
 import com.spaceapps.backend.model.dao.feeds.FeedEntity
 import com.spaceapps.backend.model.dao.feeds.FeedItemEntity
 import com.spaceapps.backend.model.dto.PaginationResponse
+import com.spaceapps.backend.model.dto.feeds.FeedFullResponse
 import com.spaceapps.backend.model.dto.feeds.FeedItemDto
 import com.spaceapps.backend.model.dto.feeds.FeedRequest
-import com.spaceapps.backend.model.dto.feeds.FeedResponse
+import com.spaceapps.backend.model.dto.feeds.FeedShortResponse
 import com.spaceapps.backend.repository.FeedsRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
@@ -22,30 +23,30 @@ class FeedsService @Autowired constructor(
     fun getSingleFeed(feedId: Int): ResponseEntity<*> {
         val entity = feedsRepository.findById(feedId)
         return if (entity.isPresent) {
-            ResponseEntity.ok(mapFeedEntityToResponse(entity.get()))
+            ResponseEntity.ok(mapFeedEntityToFullResponse(entity.get()))
         } else {
             ResponseEntity.badRequest().body(INCORRECT_FEED_ID)
         }
     }
 
-    fun getFeeds(search: String, pageable: Pageable): PaginationResponse<FeedResponse> {
+    fun getFeeds(search: String, pageable: Pageable): PaginationResponse<*> {
         val page = feedsRepository.findAllByTitleContains(search, pageable)
         return PaginationResponse(
-            data = page.content.map(::mapFeedEntityToResponse),
+            data = page.content.map(::mapFeedEntityToShortResponse),
             page = page.number,
             total = page.totalElements,
             isLast = page.isLast
         )
     }
 
-    fun createFeed(request: FeedRequest): FeedResponse {
+    fun createFeed(request: FeedRequest): FeedFullResponse {
         val entity = feedsRepository.save(
             FeedEntity(
                 title = request.title,
                 items = request.items.map { FeedItemEntity(text = it.text) }.toMutableList()
             )
         )
-        return mapFeedEntityToResponse(entity)
+        return mapFeedEntityToFullResponse(entity)
     }
 
     fun updateFeed(feedId: Int, request: FeedRequest): ResponseEntity<*> {
@@ -54,7 +55,7 @@ class FeedsService @Autowired constructor(
             val feed = entity.get()
             feed.title = request.title
             feed.items = request.items.map { FeedItemEntity(text = it.text) }.toMutableList()
-            ResponseEntity.ok(mapFeedEntityToResponse(feedsRepository.save(feed)))
+            ResponseEntity.ok(mapFeedEntityToFullResponse(feedsRepository.save(feed)))
         } else {
             ResponseEntity.badRequest().body(INCORRECT_FEED_ID)
         }
@@ -68,8 +69,16 @@ class FeedsService @Autowired constructor(
         return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(null)
     }
 
-    private fun mapFeedEntityToResponse(entity: FeedEntity): FeedResponse {
-        return FeedResponse(
+    private fun mapFeedEntityToShortResponse(entity: FeedEntity): FeedShortResponse {
+        return FeedShortResponse(
+            id = entity.id,
+            title = entity.title,
+            created = entity.created
+        )
+    }
+
+    private fun mapFeedEntityToFullResponse(entity: FeedEntity): FeedFullResponse {
+        return FeedFullResponse(
             id = entity.id,
             title = entity.title,
             items = entity.items.map(::mapFeedItemEntityToResponse),

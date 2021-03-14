@@ -8,4 +8,7 @@ spring:
     url: 'jdbc:postgresql://ec2-52-30-161-203.eu-west-1.compute.amazonaws.com:5432/d31necqj0jdkfd'
     username: 'citilsprqeawyr'
     password: '85a60dfa388dc909f5f5bbb5df0bde6cde19bf625cce893f258f213ac30da967'
-
+  servlet:
+    multipart:
+      max-file-size: 150MB
+      max-request-size: 150MB

@@ -3,7 +3,6 @@ package com.spaceapps.backend.service
 import com.spaceapps.backend.*
 import com.spaceapps.backend.model.dao.auth.DeviceEntity
 import com.spaceapps.backend.model.dao.auth.UserEntity
-import com.spaceapps.backend.model.dto.auth.UserType
 import com.spaceapps.backend.model.dto.auth.*
 import com.spaceapps.backend.proxy.AppleSignInProxy
 import com.spaceapps.backend.proxy.FacebookSignInProxy
