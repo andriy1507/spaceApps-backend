@@ -1,12 +1,12 @@
 package com.spaceapps.backend.utils
 
-import com.fasterxml.jackson.annotation.JsonProperty
 import com.spaceapps.backend.model.dao.auth.UserEntity
 import com.spaceapps.backend.model.dto.auth.AuthorizationTokenResponse
 import com.spaceapps.backend.model.dto.auth.DeviceRequest
 import io.jsonwebtoken.IncorrectClaimException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.MissingClaimException
+import io.jsonwebtoken.jackson.io.JacksonDeserializer
 import io.jsonwebtoken.jackson.io.JacksonSerializer
 import io.jsonwebtoken.security.Keys
 import java.time.LocalDateTime
@@ -16,6 +16,8 @@ import java.util.*
 object JsonWebTokenUtils {
 
     private const val TOKEN_TYPE = "type"
+    private const val TOKEN_TYPE_AUTH = "authorization"
+    private const val TOKEN_TYPE_REFRESH = "refresh"
     private const val DEVICE_TOKEN = "device_token"
     private const val PLATFORM = "platform"
     private const val ISSUER = "spaceapps.com"
@@ -26,13 +28,14 @@ object JsonWebTokenUtils {
 
     @Throws(MissingClaimException::class, IncorrectClaimException::class)
     fun validateAuthorizationToken(token: String): String? {
-        val claims = Jwts.parserBuilder()
-            .setSigningKey(SIGN_SECRET)
+        val parser = Jwts.parserBuilder()
+            .setSigningKey(Keys.hmacShaKeyFor(SIGN_SECRET))
+            .deserializeJsonWith(JacksonDeserializer())
             .build()
-            .parseClaimsJws(token)
+        val claims = parser.parseClaimsJws(token)
         if (claims.body.expiration.before(Date())) return null
-        if (claims.body.get(TOKEN_TYPE, TokenType::class.java) != TokenType.Authorization) return null
-        return claims.body.subject
+        if (claims.header[TOKEN_TYPE] != TOKEN_TYPE_AUTH) return null
+        return claims.body.get(USER_NAME, String::class.java)
     }
 
     fun generateAuthTokenResponse(user: UserEntity, device: DeviceRequest): AuthorizationTokenResponse {
@@ -55,12 +58,12 @@ object JsonWebTokenUtils {
         val authExp = now.plusDays(1)
         val authToken = jwtBuilder
             .setExpiration(Date.from(authExp.toInstant(ZoneOffset.UTC)))
-            .setHeader(mapOf(TOKEN_TYPE to TokenType.Authorization))
+            .setHeader(mapOf(TOKEN_TYPE to TOKEN_TYPE_AUTH))
             .compact()
         val refreshExp = now.plusMonths(1)
         val refreshToken = jwtBuilder
             .setExpiration(Date.from(refreshExp.toInstant(ZoneOffset.UTC)))
-            .setHeader(mapOf(TOKEN_TYPE to TokenType.Refresh))
+            .setHeader(mapOf(TOKEN_TYPE to TOKEN_TYPE_REFRESH))
             .compact()
         return AuthorizationTokenResponse(
             authToken = authToken,
@@ -69,13 +72,4 @@ object JsonWebTokenUtils {
             refreshTokenExp = refreshExp
         )
     }
-
-    private enum class TokenType {
-        @JsonProperty("authorization")
-        Authorization,
-
-        @JsonProperty("refresh")
-        Refresh
-    }
-
 }
