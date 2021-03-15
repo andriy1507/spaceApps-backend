@@ -1,15 +1,44 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Password reset</title>
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@500;900&display=swap" rel="stylesheet">
+    <style>
+        .main-container {
+            background: #e91e63;
+            font-size: 2.5rem;
+            padding: 25px;
+            height: fit-content;
+            width: available;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .text-container {
+            color: #fafafa;
+            padding-bottom: 25px;
+        }
+
+        .reset-token-container {
+            background: #fafafa;
+            font-size: 5rem;
+            width: fit-content;
+            padding: 25px;
+            color: #161616;
+            font-weight: bolder;
+        }
+    </style>
 </head>
 <body>
-<div style="background-color: mediumvioletred; color: azure; width: 100%; padding: 25px">
-    <h3>Dear user, here is your reset password code:</h3>
-</div>
-<div>
-    <h1 th:text="${resetToken}"></h1>
+<div class="main-container">
+    <div class="text-container">
+        Dear user, here is your reset password code:
+    </div>
+    <div class="reset-token-container">
+        <!--/*@thymesVar id="resetToken" type="java.lang.String"*/-->
+        <span th:text="${resetToken}">123456</span>
+    </div>
 </div>
 </body>
 </html>

@@ -16,5 +16,5 @@ data class FeedEntity(
     var title: String = "",
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
     @JoinColumn(name = "feed_id")
-    var items: MutableList<FeedItemEntity> = mutableListOf()
+    var items: MutableList<FeedItemEntity> = mutableListOf(),
 )

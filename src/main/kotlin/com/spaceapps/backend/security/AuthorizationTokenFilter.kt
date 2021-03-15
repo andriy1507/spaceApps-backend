@@ -4,12 +4,12 @@ import com.spaceapps.backend.AUTH_TOKEN_HEADER
 import com.spaceapps.backend.AUTH_TOKEN_PREFIX
 import com.spaceapps.backend.model.dao.auth.UserEntity
 import com.spaceapps.backend.repository.UserRepository
+import com.spaceapps.backend.utils.ApplicationUserDetails
 import com.spaceapps.backend.utils.JsonWebTokenUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContext
 import org.springframework.security.core.context.SecurityContextHolder
-import org.springframework.security.core.userdetails.User
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import javax.servlet.FilterChain
@@ -48,6 +48,10 @@ class AuthorizationTokenFilter @Autowired constructor(
 
     private fun authenticate(user: UserEntity) {
         securityContext.authentication =
-            UsernamePasswordAuthenticationToken(User(user.email, user.password, emptyList()), null, emptyList())
+            UsernamePasswordAuthenticationToken(
+                ApplicationUserDetails(user.id, user.email, user.password, emptyList()),
+                null,
+                emptyList()
+            )
     }
 }

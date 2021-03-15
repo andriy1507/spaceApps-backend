@@ -1,9 +1,10 @@
 package com.spaceapps.backend.controller
 
-import com.spaceapps.backend.model.dto.PaginationResponse
+import com.spaceapps.backend.model.dto.feeds.CommentRequest
 import com.spaceapps.backend.model.dto.feeds.FeedFullResponse
 import com.spaceapps.backend.model.dto.feeds.FeedRequest
 import com.spaceapps.backend.service.FeedsService
+import com.spaceapps.backend.utils.ApplicationUserDetails
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiImplicitParam
 import io.swagger.annotations.ApiOperation
@@ -11,7 +12,9 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
+import springfox.documentation.annotations.ApiIgnore
 
 @RestController
 @Api(tags = ["Feeds"], description = "Feeds endpoints")
@@ -42,9 +45,12 @@ class FeedsController(
             required = false,
             defaultValue = ""
         )
-        search: String
-    ): PaginationResponse<*> {
-        return feedsService.getFeeds(search, pageable)
+        search: String,
+        @ApiIgnore
+        auth: Authentication
+    ): ResponseEntity<*> {
+        val user = auth.principal as ApplicationUserDetails
+        return feedsService.getFeeds(search, pageable, user)
     }
 
     @GetMapping("/{feedId}")
@@ -56,8 +62,12 @@ class FeedsController(
         dataTypeClass = String::class,
         required = true
     )
-    fun getSingleFeed(@PathVariable("feedId") feedId: Int): ResponseEntity<*> {
-        return feedsService.getSingleFeed(feedId)
+    fun getSingleFeed(
+        @PathVariable("feedId") feedId: Int,
+        @ApiIgnore auth: Authentication
+    ): ResponseEntity<*> {
+        val user = auth.principal as ApplicationUserDetails
+        return feedsService.getSingleFeed(feedId, user)
     }
 
     @PostMapping("/create")
@@ -69,8 +79,12 @@ class FeedsController(
         dataTypeClass = String::class,
         required = true
     )
-    fun postFeed(@RequestBody request: FeedRequest): FeedFullResponse {
-        return feedsService.createFeed(request)
+    fun postFeed(
+        @RequestBody request: FeedRequest,
+        @ApiIgnore auth: Authentication
+    ): FeedFullResponse {
+        val user = auth.principal as ApplicationUserDetails
+        return feedsService.createFeed(request, user)
     }
 
     @PutMapping("/update/{feedId}")
@@ -82,8 +96,13 @@ class FeedsController(
         dataTypeClass = String::class,
         required = true
     )
-    fun updateFeed(@PathVariable feedId: Int, @RequestBody request: FeedRequest): ResponseEntity<*> {
-        return feedsService.updateFeed(feedId, request)
+    fun updateFeed(
+        @PathVariable("feedId") feedId: Int,
+        @RequestBody request: FeedRequest,
+        @ApiIgnore auth: Authentication
+    ): ResponseEntity<*> {
+        val user = auth.principal as ApplicationUserDetails
+        return feedsService.updateFeed(feedId, request, user)
     }
 
     @DeleteMapping("/delete/{feedId}")
@@ -108,8 +127,12 @@ class FeedsController(
         dataTypeClass = String::class,
         required = true
     )
-    fun toggleFeedLike(@PathVariable("feedId") feedId: Int): ResponseEntity<*> {
-        return feedsService.toggleLikeForFeed(feedId)
+    fun toggleFeedLike(
+        @PathVariable("feedId") feedId: Int,
+        @ApiIgnore auth: Authentication
+    ): ResponseEntity<*> {
+        val user = auth.principal as ApplicationUserDetails
+        return feedsService.toggleFeedLike(feedId, user)
     }
 
     @PostMapping("/comments/create/{feedId}")
@@ -121,7 +144,14 @@ class FeedsController(
         dataTypeClass = String::class,
         required = true
     )
-    fun createComment(@PathVariable("feedId") feedId: Int) = Unit
+    fun createComment(
+        @PathVariable("feedId") feedId: Int,
+        @RequestBody request: CommentRequest,
+        @ApiIgnore auth: Authentication
+    ): ResponseEntity<*> {
+        val user = auth.principal as ApplicationUserDetails
+        return feedsService.createComment(feedId, request, user)
+    }
 
     @GetMapping("/comments/{feedId}")
     @ApiOperation("Returns paginated comments for feed by ID")
@@ -134,8 +164,13 @@ class FeedsController(
     )
     fun getCommentsPaginated(
         @PageableDefault(size = 20, page = 0) pageable: Pageable,
-        @PathVariable("feedId") feedId: Int
-    ) = Unit
+        @PathVariable("feedId") feedId: Int,
+        @RequestParam("search", required = false, defaultValue = "") search: String,
+        @ApiIgnore auth: Authentication
+    ): ResponseEntity<*> {
+        val user = auth.principal as ApplicationUserDetails
+        return feedsService.getCommentsByFeedIdPaginated(pageable, feedId, search, user)
+    }
 
     @PutMapping("/comments/update/{commentId}")
     @ApiOperation("Updates comment by ID")
@@ -146,7 +181,14 @@ class FeedsController(
         dataTypeClass = String::class,
         required = true
     )
-    fun updateComment(@PathVariable("commentId") commentId: Int) = Unit
+    fun updateComment(
+        @PathVariable("commentId") commentId: Int,
+        @RequestBody request: CommentRequest,
+        @ApiIgnore auth: Authentication
+    ): ResponseEntity<*> {
+        val user = auth.principal as ApplicationUserDetails
+        return feedsService.updateComment(commentId, request, user)
+    }
 
     @DeleteMapping("/comments/delete/{commentId}")
     @ApiOperation("Deletes comment by ID")
@@ -157,7 +199,13 @@ class FeedsController(
         dataTypeClass = String::class,
         required = true
     )
-    fun deleteComment(@PathVariable("commentId") commentId: Int) = Unit
+    fun deleteComment(
+        @PathVariable("commentId") commentId: Int,
+        @ApiIgnore auth: Authentication
+    ) {
+        val user = auth.principal as ApplicationUserDetails
+        feedsService.deleteComment(commentId)
+    }
 
     @PatchMapping("/comments/like/{commentId}")
     @ApiOperation("Toggles like for comment by ID")
@@ -168,6 +216,11 @@ class FeedsController(
         dataTypeClass = String::class,
         required = true
     )
-    fun toggleCommentLike(@PathVariable("commentId") commentId: Int) = Unit
-
+    fun toggleCommentLike(
+        @PathVariable("commentId") commentId: Int,
+        @ApiIgnore auth: Authentication
+    ): ResponseEntity<*> {
+        val user = auth.principal as ApplicationUserDetails
+        return feedsService.toggleCommentLike(commentId, user)
+    }
 }

@@ -18,7 +18,6 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
 import java.util.*
-import kotlin.random.Random
 
 @Service
 // TODO: 3/15/2021 Extract some logic to UserService, DeviceService and SocialSignInService
@@ -29,7 +28,7 @@ class AuthService @Autowired constructor(
     private val googleSignInProxy: GoogleSignInProxy,
     private val facebookSignInProxy: FacebookSignInProxy,
     private val appleSignInProxy: AppleSignInProxy,
-    private val mailSenderService: MailSenderService
+    private val resetPasswordService: ResetPasswordService
 ) {
 
     fun signIn(request: AuthorizationRequest): ResponseEntity<*> {
@@ -117,7 +116,7 @@ class AuthService @Autowired constructor(
     }
 
     fun sendResetToken(request: SendResetTokenRequest): ResponseEntity<*> {
-        mailSenderService.sendResetTokenMail(Random.nextInt(100000, 999999).toString(), request.email)
+        resetPasswordService.sendResetToken(request.email)
         return ResponseEntity.ok(Unit)
     }
 
