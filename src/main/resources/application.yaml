@@ -12,3 +12,11 @@ spring:
     multipart:
       max-file-size: 150MB
       max-request-size: 150MB
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: "noreply.spaceapps@gmail.com"
+    password: "vfkimfzzassvqiku"
+    protocol: "smtp"
+    starttls: true
+    auth: true
