@@ -2,13 +2,16 @@ package com.spaceapps.backend.service
 
 import com.spaceapps.backend.config.properties.MailServiceProperties
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.mail.SimpleMailMessage
 import org.springframework.mail.javamail.JavaMailSenderImpl
+import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Service
+import org.thymeleaf.context.Context
+import org.thymeleaf.spring5.SpringTemplateEngine
 
 @Service
 class MailSenderService @Autowired constructor(
-    private val properties: MailServiceProperties
+    private val properties: MailServiceProperties,
+    private val templateEngine: SpringTemplateEngine
 ) {
 
     private val mailSender = JavaMailSenderImpl().apply {
@@ -21,14 +24,15 @@ class MailSenderService @Autowired constructor(
         javaMailProperties["mail.smtp.starttls.enable"] = properties.starttls
     }
 
-
-    // TODO: 3/15/2021 Add template
     fun sendResetTokenMail(resetToken: String, email: String) {
-        val mailMessage = SimpleMailMessage()
-        val text = "Your reset token:\n$resetToken"
-        mailMessage.setTo(email)
-        mailMessage.setSubject("Password reset")
-        mailMessage.setText(text)
+        val mailMessage = mailSender.createMimeMessage()
+        val helper = MimeMessageHelper(mailMessage, true, Charsets.UTF_8.name())
+        val context = Context()
+        context.setVariable("resetToken", resetToken)
+        val text = templateEngine.process("reset-token-email", context)
+        helper.setTo(email)
+        helper.setSubject("Password reset")
+        helper.setText(text, true)
         mailSender.send(mailMessage)
     }
 }

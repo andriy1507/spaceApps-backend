@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Password reset</title>
+</head>
+<body>
+<div style="background-color: mediumvioletred; color: azure; width: 100%; padding: 25px">
+    <h3>Dear user, here is your reset password code:</h3>
+</div>
+<div>
+    <h1 th:text="${resetToken}"></h1>
+</div>
+</body>
+</html>
