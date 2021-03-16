@@ -121,11 +121,15 @@ class AuthService @Autowired constructor(
     }
 
     fun verifyResetToken(request: VerifyResetTokenRequest): ResponseEntity<*> {
-        return ResponseEntity.ok(Unit)
+        return if (resetPasswordService.verifyResetToken(request.resetToken, request.email)) {
+            ResponseEntity.ok().body(null)
+        } else {
+            ResponseEntity.badRequest().body(INVALID_RESET_CODE)
+        }
     }
 
     fun resetPassword(request: ResetPasswordRequest): ResponseEntity<*> {
-        return ResponseEntity.ok(Unit)
+        return resetPasswordService.changePassword(request.resetToken, request.email, request.newPassword)
     }
 
 }

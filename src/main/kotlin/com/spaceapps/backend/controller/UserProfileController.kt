@@ -15,8 +15,7 @@ class UserProfileController {
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun getUserProfileById(@PathVariable("userId") userId: Int) {
 
@@ -27,8 +26,7 @@ class UserProfileController {
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun editUserProfile() {
 

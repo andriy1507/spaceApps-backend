@@ -26,8 +26,7 @@ class ChatController @Autowired constructor(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun getChatConversationsPaginated(
         @PageableDefault(size = 20, page = 0) pageable: Pageable,
@@ -46,8 +45,7 @@ class ChatController @Autowired constructor(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun createChatConversation(@RequestBody request: ChatConversationRequest): ResponseEntity<*> {
         return chatService.createConversation(request)
@@ -59,8 +57,7 @@ class ChatController @Autowired constructor(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun deleteChatConversation(@PathVariable("conversationId") conversationId: String): ResponseEntity<*> {
         return chatService.deleteConversationById(conversationId)
@@ -72,8 +69,7 @@ class ChatController @Autowired constructor(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun updateChatConversation(
         @PathVariable("conversationId") conversationId: String,
@@ -88,8 +84,7 @@ class ChatController @Autowired constructor(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun getChatMessagesPaginated(
         @PageableDefault(size = 20, page = 0) pageable: Pageable,
@@ -109,8 +104,7 @@ class ChatController @Autowired constructor(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun createChatMessage(
         @PathVariable("conversationId") conversationId: String,
@@ -125,8 +119,7 @@ class ChatController @Autowired constructor(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun deleteChatMessage(@PathVariable("messageId") messageId: String): ResponseEntity<*> {
         return chatService.deleteMessageById(messageId)
@@ -138,8 +131,7 @@ class ChatController @Autowired constructor(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun updateChatMessage(
         @PathVariable("messageId") messageId: String,

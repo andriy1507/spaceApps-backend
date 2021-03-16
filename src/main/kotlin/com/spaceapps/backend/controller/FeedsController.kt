@@ -29,8 +29,7 @@ class FeedsController(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun getFeeds(
         @PageableDefault(
@@ -59,8 +58,7 @@ class FeedsController(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun getSingleFeed(
         @PathVariable("feedId") feedId: Int,
@@ -76,8 +74,7 @@ class FeedsController(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun postFeed(
         @RequestBody request: FeedRequest,
@@ -93,8 +90,7 @@ class FeedsController(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun updateFeed(
         @PathVariable("feedId") feedId: Int,
@@ -111,8 +107,7 @@ class FeedsController(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun deleteFeed(@PathVariable feedId: Int) {
         feedsService.deleteFeed(feedId)
@@ -124,8 +119,7 @@ class FeedsController(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun toggleFeedLike(
         @PathVariable("feedId") feedId: Int,
@@ -141,8 +135,7 @@ class FeedsController(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun createComment(
         @PathVariable("feedId") feedId: Int,
@@ -159,8 +152,7 @@ class FeedsController(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun getCommentsPaginated(
         @PageableDefault(size = 20, page = 0) pageable: Pageable,
@@ -178,8 +170,7 @@ class FeedsController(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun updateComment(
         @PathVariable("commentId") commentId: Int,
@@ -196,8 +187,7 @@ class FeedsController(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun deleteComment(
         @PathVariable("commentId") commentId: Int,
@@ -213,8 +203,7 @@ class FeedsController(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun toggleCommentLike(
         @PathVariable("commentId") commentId: Int,

@@ -1,7 +1,7 @@
 package com.spaceapps.backend.controller
 
 import com.spaceapps.backend.model.dto.uploads.UploadType
-import com.spaceapps.backend.security.UploadsService
+import com.spaceapps.backend.service.UploadsService
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiImplicitParam
 import io.swagger.annotations.ApiOperation
@@ -23,8 +23,7 @@ class UploadsController @Autowired constructor(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun getFile(@PathVariable("fileName") fileName: String): ResponseEntity<*> {
         return uploadsService.getFile(fileName)
@@ -36,8 +35,7 @@ class UploadsController @Autowired constructor(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun uploadFile(@RequestPart(required = true) file: MultipartFile): ResponseEntity<*> {
         return uploadsService.saveFile(file, UploadType.File)
@@ -49,8 +47,7 @@ class UploadsController @Autowired constructor(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun uploadImage(@RequestPart(required = true) file: MultipartFile): ResponseEntity<*> {
         return uploadsService.saveFile(file, UploadType.Image)
@@ -62,8 +59,7 @@ class UploadsController @Autowired constructor(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun uploadVideo(@RequestPart(required = true) file: MultipartFile): ResponseEntity<*> {
         return uploadsService.saveFile(file, UploadType.Video)
@@ -75,8 +71,7 @@ class UploadsController @Autowired constructor(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun uploadAudio(@RequestPart(required = true) file: MultipartFile): ResponseEntity<*> {
         return uploadsService.saveFile(file, UploadType.Audio)
@@ -88,8 +83,7 @@ class UploadsController @Autowired constructor(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun deleteFile(@PathVariable("fileName") fileName: String): ResponseEntity<*> {
         return uploadsService.deleteFile(fileName)

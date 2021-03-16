@@ -76,8 +76,7 @@ class AuthController @Autowired constructor(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun addDevice(@RequestBody request: DeviceRequest): ResponseEntity<*> {
         return authService.addDevice(request)
@@ -89,8 +88,7 @@ class AuthController @Autowired constructor(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class,
-        required = true
+        dataTypeClass = String::class
     )
     fun logOut(@RequestBody request: DeviceRequest): ResponseEntity<*> {
         return authService.logOut(request)

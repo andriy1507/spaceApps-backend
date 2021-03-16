@@ -5,4 +5,6 @@ import org.springframework.data.repository.CrudRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface ResetTokenRepository : CrudRepository<ResetTokenEntity, Int>
+interface ResetTokenRepository : CrudRepository<ResetTokenEntity, Int> {
+    fun getByTokenAndEmail(token: String, email: String): ResetTokenEntity?
+}

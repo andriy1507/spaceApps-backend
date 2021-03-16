@@ -1,4 +1,4 @@
-package com.spaceapps.backend.security
+package com.spaceapps.backend.service
 
 import com.spaceapps.backend.INCORRECT_FILE_NAME
 import com.spaceapps.backend.model.dao.uploads.UploadEntity
