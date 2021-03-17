@@ -24,6 +24,7 @@ class SecurityConfig @Autowired constructor(
             .authorizeRequests()
             .antMatchers("/auth/**").permitAll()
             .antMatchers("/chat-socket").permitAll()
+            .antMatchers("/static/**").permitAll()
             .antMatchers(
                 "/swagger-ui/**",
                 "/v2/api-docs",
