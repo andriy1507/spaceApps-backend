@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
+import springfox.documentation.annotations.ApiIgnore
 
 @RestController
 @RequestMapping("notifications")
@@ -23,7 +24,7 @@ class NotificationsController {
     fun getNotifications(
         @PageableDefault(size = 20, page = 0)
         pageable: Pageable,
-        auth: Authentication
+        @ApiIgnore auth: Authentication
     ) {
 
     }
@@ -38,7 +39,7 @@ class NotificationsController {
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
     fun markNotificationViewed(
         @PathVariable("notificationId") notificationId: Int,
-        auth: Authentication
+        @ApiIgnore auth: Authentication
     ) {
 
     }
@@ -53,7 +54,7 @@ class NotificationsController {
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
     fun deleteNotification(
         @PathVariable("notificationId") notificationId: Int,
-        auth: Authentication
+        @ApiIgnore auth: Authentication
     ) {
 
     }

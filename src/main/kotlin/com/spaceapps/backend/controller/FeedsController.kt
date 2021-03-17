@@ -1,6 +1,5 @@
 package com.spaceapps.backend.controller
 
-import com.spaceapps.backend.model.dto.PaginationResponse
 import com.spaceapps.backend.model.dto.feeds.*
 import com.spaceapps.backend.model.dto.pagination.CommentsPaginationResponse
 import com.spaceapps.backend.model.dto.pagination.FeedsPaginationResponse

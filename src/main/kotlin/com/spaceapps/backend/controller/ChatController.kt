@@ -1,6 +1,5 @@
 package com.spaceapps.backend.controller
 
-import com.spaceapps.backend.model.dto.PaginationResponse
 import com.spaceapps.backend.model.dto.chat.ChatConversationRequest
 import com.spaceapps.backend.model.dto.chat.ChatConversationResponse
 import com.spaceapps.backend.model.dto.chat.ChatMessageRequest
