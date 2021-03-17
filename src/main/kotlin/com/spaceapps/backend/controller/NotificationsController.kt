@@ -1,8 +1,6 @@
 package com.spaceapps.backend.controller
 
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiImplicitParam
-import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.*
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
 import org.springframework.security.core.Authentication
@@ -21,6 +19,7 @@ class NotificationsController {
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
     fun getNotifications(
         @PageableDefault(size = 20, page = 0)
         pageable: Pageable,
@@ -36,6 +35,7 @@ class NotificationsController {
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
     fun markNotificationViewed(
         @PathVariable("notificationId") notificationId: Int,
         auth: Authentication
@@ -50,6 +50,7 @@ class NotificationsController {
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
     fun deleteNotification(
         @PathVariable("notificationId") notificationId: Int,
         auth: Authentication

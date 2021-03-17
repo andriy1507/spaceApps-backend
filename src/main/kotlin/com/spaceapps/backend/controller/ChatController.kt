@@ -1,12 +1,14 @@
 package com.spaceapps.backend.controller
 
+import com.spaceapps.backend.model.dto.PaginationResponse
 import com.spaceapps.backend.model.dto.chat.ChatConversationRequest
 import com.spaceapps.backend.model.dto.chat.ChatConversationResponse
 import com.spaceapps.backend.model.dto.chat.ChatMessageRequest
+import com.spaceapps.backend.model.dto.chat.ChatMessageResponse
+import com.spaceapps.backend.model.dto.pagination.ConversationsPaginationResponse
+import com.spaceapps.backend.model.dto.pagination.MessagesPaginationResponse
 import com.spaceapps.backend.service.ChatService
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiImplicitParam
-import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
@@ -28,6 +30,7 @@ class ChatController @Autowired constructor(
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = ConversationsPaginationResponse::class))
     fun getChatConversationsPaginated(
         @PageableDefault(size = 20, page = 0) pageable: Pageable,
         @RequestParam(
@@ -47,6 +50,7 @@ class ChatController @Autowired constructor(
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = ChatConversationResponse::class))
     fun createChatConversation(@RequestBody request: ChatConversationRequest): ResponseEntity<*> {
         return chatService.createConversation(request)
     }
@@ -59,6 +63,7 @@ class ChatController @Autowired constructor(
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
     fun deleteChatConversation(@PathVariable("conversationId") conversationId: String): ResponseEntity<*> {
         return chatService.deleteConversationById(conversationId)
     }
@@ -71,6 +76,7 @@ class ChatController @Autowired constructor(
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = ChatConversationResponse::class))
     fun updateChatConversation(
         @PathVariable("conversationId") conversationId: String,
         @RequestBody request: ChatConversationRequest
@@ -86,6 +92,7 @@ class ChatController @Autowired constructor(
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = MessagesPaginationResponse::class))
     fun getChatMessagesPaginated(
         @PageableDefault(size = 20, page = 0) pageable: Pageable,
         @PathVariable("conversationId") conversationId: String,
@@ -106,6 +113,7 @@ class ChatController @Autowired constructor(
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = ChatMessageResponse::class))
     fun createChatMessage(
         @PathVariable("conversationId") conversationId: String,
         @RequestBody request: ChatMessageRequest
@@ -121,6 +129,7 @@ class ChatController @Autowired constructor(
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
     fun deleteChatMessage(@PathVariable("messageId") messageId: String): ResponseEntity<*> {
         return chatService.deleteMessageById(messageId)
     }
@@ -133,6 +142,7 @@ class ChatController @Autowired constructor(
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = ChatMessageResponse::class))
     fun updateChatMessage(
         @PathVariable("messageId") messageId: String,
         @RequestBody request: ChatMessageRequest

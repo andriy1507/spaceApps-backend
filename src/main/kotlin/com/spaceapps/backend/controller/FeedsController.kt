@@ -1,13 +1,12 @@
 package com.spaceapps.backend.controller
 
-import com.spaceapps.backend.model.dto.feeds.CommentRequest
-import com.spaceapps.backend.model.dto.feeds.FeedFullResponse
-import com.spaceapps.backend.model.dto.feeds.FeedRequest
+import com.spaceapps.backend.model.dto.PaginationResponse
+import com.spaceapps.backend.model.dto.feeds.*
+import com.spaceapps.backend.model.dto.pagination.CommentsPaginationResponse
+import com.spaceapps.backend.model.dto.pagination.FeedsPaginationResponse
 import com.spaceapps.backend.service.FeedsService
 import com.spaceapps.backend.utils.ApplicationUserDetails
-import io.swagger.annotations.Api
-import io.swagger.annotations.ApiImplicitParam
-import io.swagger.annotations.ApiOperation
+import io.swagger.annotations.*
 import org.springframework.data.domain.Pageable
 import org.springframework.data.domain.Sort
 import org.springframework.data.web.PageableDefault
@@ -31,6 +30,7 @@ class FeedsController(
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = FeedsPaginationResponse::class))
     fun getFeeds(
         @PageableDefault(
             size = 20,
@@ -60,6 +60,7 @@ class FeedsController(
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = FeedFullResponse::class))
     fun getSingleFeed(
         @PathVariable("feedId") feedId: Int,
         @ApiIgnore auth: Authentication
@@ -76,6 +77,7 @@ class FeedsController(
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = FeedShortResponse::class))
     fun postFeed(
         @RequestBody request: FeedRequest,
         @ApiIgnore auth: Authentication
@@ -92,6 +94,7 @@ class FeedsController(
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = FeedShortResponse::class))
     fun updateFeed(
         @PathVariable("feedId") feedId: Int,
         @RequestBody request: FeedRequest,
@@ -109,6 +112,7 @@ class FeedsController(
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
     fun deleteFeed(@PathVariable feedId: Int) {
         feedsService.deleteFeed(feedId)
     }
@@ -121,6 +125,7 @@ class FeedsController(
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = FeedShortResponse::class))
     fun toggleFeedLike(
         @PathVariable("feedId") feedId: Int,
         @ApiIgnore auth: Authentication
@@ -137,6 +142,7 @@ class FeedsController(
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = CommentResponse::class))
     fun createComment(
         @PathVariable("feedId") feedId: Int,
         @RequestBody request: CommentRequest,
@@ -154,6 +160,7 @@ class FeedsController(
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = CommentsPaginationResponse::class))
     fun getCommentsPaginated(
         @PageableDefault(size = 20, page = 0) pageable: Pageable,
         @PathVariable("feedId") feedId: Int,
@@ -172,6 +179,7 @@ class FeedsController(
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = CommentResponse::class))
     fun updateComment(
         @PathVariable("commentId") commentId: Int,
         @RequestBody request: CommentRequest,
@@ -189,6 +197,7 @@ class FeedsController(
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
     fun deleteComment(
         @PathVariable("commentId") commentId: Int,
         @ApiIgnore auth: Authentication
@@ -205,6 +214,7 @@ class FeedsController(
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = CommentResponse::class))
     fun toggleCommentLike(
         @PathVariable("commentId") commentId: Int,
         @ApiIgnore auth: Authentication
