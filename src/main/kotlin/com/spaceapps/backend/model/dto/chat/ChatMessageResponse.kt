@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDateTime
 
 data class ChatMessageResponse(
-    @JsonProperty("messageId")
+    @JsonProperty("id")
     val messageId: String,
-    @JsonProperty("conversationId")
+    @JsonProperty("conversation_id")
     val conversationId: String,
-    @JsonProperty("messageText")
+    @JsonProperty("text")
     val messageText: String,
-    @JsonProperty("dateTime")
+    @JsonProperty("date_time")
     val dateTime: LocalDateTime
 )

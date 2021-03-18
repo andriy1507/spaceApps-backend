@@ -3,9 +3,9 @@ package com.spaceapps.backend.model.dto.auth
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class ResetPasswordRequest(
-    @JsonProperty("resetToken")
+    @JsonProperty("reset_token")
     val resetToken: String,
-    @JsonProperty("newPassword")
+    @JsonProperty("new_password")
     val newPassword: String,
     @JsonProperty("email")
     val email: String

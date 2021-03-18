@@ -81,7 +81,7 @@ class UploadsController @Autowired constructor(
         return uploadsService.saveFile(file, UploadType.Audio)
     }
 
-    @DeleteMapping("/delete/{fileName}")
+    @DeleteMapping("/{fileName}")
     @ApiOperation("Deletes file by name")
     @ApiImplicitParam(
         name = "Authorization",

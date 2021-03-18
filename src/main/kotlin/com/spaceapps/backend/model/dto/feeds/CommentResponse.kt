@@ -7,8 +7,8 @@ data class CommentResponse(
     val id: Int,
     @JsonProperty("text")
     val text: String,
-    @JsonProperty("likesCount")
+    @JsonProperty("likes_count")
     val likesCount: Int,
-    @JsonProperty("isLiked")
+    @JsonProperty("liked")
     val isLiked: Boolean
 )

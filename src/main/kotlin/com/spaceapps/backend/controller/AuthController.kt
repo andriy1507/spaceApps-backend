@@ -90,7 +90,7 @@ class AuthController @Autowired constructor(
         return authService.addDevice(request)
     }
 
-    @PostMapping("/log-out")
+    @DeleteMapping("/log-out/{deviceToken}")
     @ApiOperation("Removes user device")
     @ApiImplicitParam(
         name = "Authorization",
@@ -99,7 +99,7 @@ class AuthController @Autowired constructor(
         dataTypeClass = String::class
     )
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
-    fun logOut(@RequestBody request: DeviceRequest): ResponseEntity<*> {
-        return authService.logOut(request)
+    fun logOut(@PathVariable("deviceToken") deviceToken: String): ResponseEntity<*> {
+        return authService.logOut(deviceToken)
     }
 }

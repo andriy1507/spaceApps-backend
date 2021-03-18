@@ -29,7 +29,7 @@ class NotificationsController {
 
     }
 
-    @PatchMapping("/viewed/{notificationId}")
+    @PatchMapping("/{notificationId}/viewed")
     @ApiImplicitParam(
         name = "Authorization",
         value = "Access token",
@@ -44,7 +44,7 @@ class NotificationsController {
 
     }
 
-    @DeleteMapping("/delete/{notificationId}")
+    @DeleteMapping("/{notificationId}")
     @ApiImplicitParam(
         name = "Authorization",
         value = "Access token",

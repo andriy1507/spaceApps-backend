@@ -12,10 +12,10 @@ data class FeedFullResponse(
     val items: List<FeedItemDto>,
     @JsonProperty("created")
     val created: LocalDateTime,
-    @JsonProperty("likesCount")
+    @JsonProperty("likes_count")
     val likesCount: Int,
-    @JsonProperty("commentsCount")
+    @JsonProperty("comments_count")
     val commentsCount: Int,
-    @JsonProperty("isLiked")
+    @JsonProperty("liked")
     val isLiked: Boolean
 )

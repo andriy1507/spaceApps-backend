@@ -9,6 +9,6 @@ open class PaginationResponse<T>(
     val total: Long,
     @JsonProperty("page")
     val page: Int,
-    @JsonProperty("isLast")
+    @JsonProperty("last")
     val isLast: Boolean
 )

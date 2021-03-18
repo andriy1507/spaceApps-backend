@@ -111,7 +111,7 @@ class AuthService @Autowired constructor(
         return ResponseEntity.ok(Unit)
     }
 
-    fun logOut(request: DeviceRequest): ResponseEntity<*> {
+    fun logOut(deviceToken: String): ResponseEntity<*> {
         return ResponseEntity.ok(Unit)
     }
 

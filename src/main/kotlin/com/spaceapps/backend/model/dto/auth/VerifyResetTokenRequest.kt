@@ -5,6 +5,6 @@ import com.fasterxml.jackson.annotation.JsonProperty
 data class VerifyResetTokenRequest(
     @JsonProperty("email")
     val email: String,
-    @JsonProperty("resetToken")
+    @JsonProperty("reset_token")
     val resetToken: String
 )

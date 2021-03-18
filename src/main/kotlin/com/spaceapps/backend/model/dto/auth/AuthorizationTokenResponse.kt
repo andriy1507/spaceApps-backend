@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDateTime
 
 data class AuthorizationTokenResponse(
-    @JsonProperty("authToken")
+    @JsonProperty("auth_token")
     val authToken: String,
-    @JsonProperty("authTokenExp")
+    @JsonProperty("auth_token_exp")
     val authTokenExp: LocalDateTime,
-    @JsonProperty("refreshToken")
+    @JsonProperty("refresh_token")
     val refreshToken: String,
-    @JsonProperty("refreshTokenExp")
+    @JsonProperty("refresh_token_exp")
     val refreshTokenExp: LocalDateTime
 )

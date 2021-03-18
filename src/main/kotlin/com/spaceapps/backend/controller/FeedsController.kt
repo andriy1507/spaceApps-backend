@@ -68,7 +68,7 @@ class FeedsController(
         return feedsService.getSingleFeed(feedId, user)
     }
 
-    @PostMapping("/create")
+    @PostMapping
     @ApiOperation("Creates new feed")
     @ApiImplicitParam(
         name = "Authorization",
@@ -85,7 +85,7 @@ class FeedsController(
         return feedsService.createFeed(request, user)
     }
 
-    @PutMapping("/update/{feedId}")
+    @PutMapping("/{feedId}")
     @ApiOperation("Updates feed by ID")
     @ApiImplicitParam(
         name = "Authorization",
@@ -103,7 +103,7 @@ class FeedsController(
         return feedsService.updateFeed(feedId, request, user)
     }
 
-    @DeleteMapping("/delete/{feedId}")
+    @DeleteMapping("/{feedId}")
     @ApiOperation("Deletes feed by ID")
     @ApiImplicitParam(
         name = "Authorization",
@@ -116,7 +116,7 @@ class FeedsController(
         feedsService.deleteFeed(feedId)
     }
 
-    @PatchMapping("/like/{feedId}")
+    @PatchMapping("/{feedId}/like")
     @ApiOperation("Toggles like for feed by ID")
     @ApiImplicitParam(
         name = "Authorization",
@@ -133,7 +133,7 @@ class FeedsController(
         return feedsService.toggleFeedLike(feedId, user)
     }
 
-    @PostMapping("/comments/create/{feedId}")
+    @PostMapping("/{feedId}/comments")
     @ApiOperation("Creates comment for feed by ID")
     @ApiImplicitParam(
         name = "Authorization",
@@ -151,7 +151,7 @@ class FeedsController(
         return feedsService.createComment(feedId, request, user)
     }
 
-    @GetMapping("/comments/{feedId}")
+    @GetMapping("/{feedId}/comments")
     @ApiOperation("Returns paginated comments for feed by ID")
     @ApiImplicitParam(
         name = "Authorization",
@@ -170,7 +170,7 @@ class FeedsController(
         return feedsService.getCommentsByFeedIdPaginated(pageable, feedId, search, user)
     }
 
-    @PutMapping("/comments/update/{commentId}")
+    @PutMapping("/{feedId}/comments/{commentId}")
     @ApiOperation("Updates comment by ID")
     @ApiImplicitParam(
         name = "Authorization",
@@ -181,6 +181,7 @@ class FeedsController(
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = CommentResponse::class))
     fun updateComment(
         @PathVariable("commentId") commentId: Int,
+        @PathVariable("feedId") feedId: Int,
         @RequestBody request: CommentRequest,
         @ApiIgnore auth: Authentication
     ): ResponseEntity<*> {
@@ -188,7 +189,7 @@ class FeedsController(
         return feedsService.updateComment(commentId, request, user)
     }
 
-    @DeleteMapping("/comments/delete/{commentId}")
+    @DeleteMapping("/{feedId}/comments/{commentId}")
     @ApiOperation("Deletes comment by ID")
     @ApiImplicitParam(
         name = "Authorization",
@@ -199,13 +200,14 @@ class FeedsController(
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
     fun deleteComment(
         @PathVariable("commentId") commentId: Int,
+        @PathVariable("feedId") feedId: Int,
         @ApiIgnore auth: Authentication
     ) {
         val user = auth.principal as ApplicationUserDetails
         feedsService.deleteComment(commentId)
     }
 
-    @PatchMapping("/comments/like/{commentId}")
+    @PatchMapping("/{feedId}/comments/{commentId}/like")
     @ApiOperation("Toggles like for comment by ID")
     @ApiImplicitParam(
         name = "Authorization",
@@ -216,6 +218,7 @@ class FeedsController(
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = CommentResponse::class))
     fun toggleCommentLike(
         @PathVariable("commentId") commentId: Int,
+        @PathVariable("feedId") feedId: Int,
         @ApiIgnore auth: Authentication
     ): ResponseEntity<*> {
         val user = auth.principal as ApplicationUserDetails
