@@ -24,7 +24,7 @@ class UserProfileController {
 
     }
 
-    @PutMapping("/")
+    @PutMapping
     @ApiImplicitParam(
         name = "Authorization",
         value = "Access token",
