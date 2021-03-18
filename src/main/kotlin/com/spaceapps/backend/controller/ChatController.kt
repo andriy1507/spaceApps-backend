@@ -1,9 +1,9 @@
 package com.spaceapps.backend.controller
 
-import com.spaceapps.backend.model.dto.chat.ChatConversationRequest
-import com.spaceapps.backend.model.dto.chat.ChatConversationResponse
 import com.spaceapps.backend.model.dto.chat.ChatMessageRequest
 import com.spaceapps.backend.model.dto.chat.ChatMessageResponse
+import com.spaceapps.backend.model.dto.chat.ChatRequest
+import com.spaceapps.backend.model.dto.chat.ChatResponse
 import com.spaceapps.backend.model.dto.pagination.ConversationsPaginationResponse
 import com.spaceapps.backend.model.dto.pagination.MessagesPaginationResponse
 import com.spaceapps.backend.service.ChatService
@@ -15,14 +15,14 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@Api(tags = ["Chat"], description = "Chat endpoints")
-@RequestMapping("chat")
+@Api(tags = ["Chats"], description = "Chats endpoints")
+@RequestMapping("chats")
 class ChatController @Autowired constructor(
     private val chatService: ChatService
 ) {
 
-    @GetMapping("/conversations")
-    @ApiOperation("Returns paginated conversations")
+    @GetMapping
+    @ApiOperation("Returns paginated chats")
     @ApiImplicitParam(
         name = "Authorization",
         value = "Access token",
@@ -30,7 +30,7 @@ class ChatController @Autowired constructor(
         dataTypeClass = String::class
     )
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = ConversationsPaginationResponse::class))
-    fun getChatConversationsPaginated(
+    fun getChatPaginated(
         @PageableDefault(size = 20, page = 0) pageable: Pageable,
         @RequestParam(
             name = "search",
@@ -38,24 +38,24 @@ class ChatController @Autowired constructor(
             defaultValue = ""
         ) search: String
     ): ResponseEntity<*> {
-        return chatService.getPaginatedConversations(search, pageable)
+        return chatService.getPaginatedChats(search, pageable)
     }
 
-    @PostMapping("/conversations")
-    @ApiOperation("Creates conversation", response = ChatConversationResponse::class)
+    @PostMapping
+    @ApiOperation("Creates chat", response = ChatResponse::class)
     @ApiImplicitParam(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
         dataTypeClass = String::class
     )
-    @ApiResponses(ApiResponse(code = 200, message = "Success", response = ChatConversationResponse::class))
-    fun createChatConversation(@RequestBody request: ChatConversationRequest): ResponseEntity<*> {
-        return chatService.createConversation(request)
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = ChatResponse::class))
+    fun createChat(@RequestBody request: ChatRequest): ResponseEntity<*> {
+        return chatService.createChat(request)
     }
 
-    @DeleteMapping("/conversations/{conversationId}")
-    @ApiOperation("Deletes conversation")
+    @DeleteMapping("/{chatId}")
+    @ApiOperation("Deletes chat by ID")
     @ApiImplicitParam(
         name = "Authorization",
         value = "Access token",
@@ -63,28 +63,28 @@ class ChatController @Autowired constructor(
         dataTypeClass = String::class
     )
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
-    fun deleteChatConversation(@PathVariable("conversationId") conversationId: String): ResponseEntity<*> {
-        return chatService.deleteConversationById(conversationId)
+    fun deleteChat(@PathVariable("chatId") chatId: String): ResponseEntity<*> {
+        return chatService.deleteChatById(chatId)
     }
 
-    @PutMapping("/conversations/{conversationId}")
-    @ApiOperation("Updates conversation")
+    @PutMapping("/{chatId}")
+    @ApiOperation("Updates chat")
     @ApiImplicitParam(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
         dataTypeClass = String::class
     )
-    @ApiResponses(ApiResponse(code = 200, message = "Success", response = ChatConversationResponse::class))
-    fun updateChatConversation(
-        @PathVariable("conversationId") conversationId: String,
-        @RequestBody request: ChatConversationRequest
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = ChatResponse::class))
+    fun updateChat(
+        @PathVariable("chatId") chatId: String,
+        @RequestBody request: ChatRequest
     ): ResponseEntity<*> {
-        return chatService.updateConversationById(conversationId, request)
+        return chatService.updateChatById(chatId, request)
     }
 
-    @GetMapping("/conversations/{conversationId}/messages")
-    @ApiOperation("Returns paginated list of messages by conversation ID")
+    @GetMapping("/{chatId}/messages")
+    @ApiOperation("Returns paginated list of messages by chat ID")
     @ApiImplicitParam(
         name = "Authorization",
         value = "Access token",
@@ -94,18 +94,18 @@ class ChatController @Autowired constructor(
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = MessagesPaginationResponse::class))
     fun getChatMessagesPaginated(
         @PageableDefault(size = 20, page = 0) pageable: Pageable,
-        @PathVariable("conversationId") conversationId: String,
+        @PathVariable("chatId") chatId: String,
         @RequestParam(
             name = "search",
             required = false,
             defaultValue = ""
         ) search: String
     ): ResponseEntity<*> {
-        return chatService.getPaginatedMessagesByConversationId(conversationId, search, pageable)
+        return chatService.getPaginatedMessagesByChatId(chatId, search, pageable)
     }
 
-    @PostMapping("/conversations/{conversationId}/messages")
-    @ApiOperation("Creates new message by conversation ID")
+    @PostMapping("/{chatId}/messages")
+    @ApiOperation("Creates new message by chat ID")
     @ApiImplicitParam(
         name = "Authorization",
         value = "Access token",
@@ -114,13 +114,13 @@ class ChatController @Autowired constructor(
     )
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = ChatMessageResponse::class))
     fun createChatMessage(
-        @PathVariable("conversationId") conversationId: String,
+        @PathVariable("chatId") chatId: String,
         @RequestBody request: ChatMessageRequest
     ): ResponseEntity<*> {
-        return chatService.createMessageByConversationId(conversationId, request)
+        return chatService.createMessageByChatId(chatId, request)
     }
 
-    @DeleteMapping("/conversations/{conversationId}/messages/{messageId}")
+    @DeleteMapping("/{chatId}/messages/{messageId}")
     @ApiOperation("Deletes message by message ID")
     @ApiImplicitParam(
         name = "Authorization",
@@ -131,12 +131,12 @@ class ChatController @Autowired constructor(
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
     fun deleteChatMessage(
         @PathVariable("messageId") messageId: String,
-        @PathVariable("conversationId") conversationId: String
+        @PathVariable("chatId") chatId: String
     ): ResponseEntity<*> {
         return chatService.deleteMessageById(messageId)
     }
 
-    @PutMapping("/conversations/{conversationId}/messages/{messageId}")
+    @PutMapping("/{chatId}/messages/{messageId}")
     @ApiOperation("Updates message by message ID")
     @ApiImplicitParam(
         name = "Authorization",
@@ -148,9 +148,8 @@ class ChatController @Autowired constructor(
     fun updateChatMessage(
         @PathVariable("messageId") messageId: String,
         @RequestBody request: ChatMessageRequest,
-        @PathVariable("conversationId") conversationId: String
+        @PathVariable("chatId") chatId: String
     ): ResponseEntity<*> {
         return chatService.updateMessageById(messageId, request)
     }
-
 }

@@ -2,7 +2,7 @@ package com.spaceapps.backend.model.dto.chat
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class ChatConversationResponse(
+data class ChatResponse(
     @JsonProperty("id")
     val conversationId: String,
     @JsonProperty("name")

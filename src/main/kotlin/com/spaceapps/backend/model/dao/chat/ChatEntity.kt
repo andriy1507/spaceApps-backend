@@ -3,8 +3,8 @@ package com.spaceapps.backend.model.dao.chat
 import javax.persistence.*
 
 @Entity
-@Table(name = "conversations")
-data class ConversationEntity(
+@Table(name = "chats")
+data class ChatEntity(
     @Id
     @Column(name = "id")
     var id: String = "",
@@ -12,6 +12,6 @@ data class ConversationEntity(
     var name: String = ""
 ) {
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.LAZY)
-    @JoinColumn(name = "conversation_id")
+    @JoinColumn(name = "chat_id")
     val messages: MutableList<MessageEntity> = mutableListOf()
 }

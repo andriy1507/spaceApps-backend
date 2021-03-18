@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 data class ChatMessageResponse(
     @JsonProperty("id")
     val messageId: String,
-    @JsonProperty("conversation_id")
+    @JsonProperty("chat_id")
     val conversationId: String,
     @JsonProperty("text")
     val messageText: String,

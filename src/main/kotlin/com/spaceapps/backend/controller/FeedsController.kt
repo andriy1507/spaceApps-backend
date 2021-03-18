@@ -116,7 +116,7 @@ class FeedsController(
         feedsService.deleteFeed(feedId)
     }
 
-    @PatchMapping("/{feedId}/like")
+    @PatchMapping("/{feedId}/toggle-like")
     @ApiOperation("Toggles like for feed by ID")
     @ApiImplicitParam(
         name = "Authorization",
@@ -207,7 +207,7 @@ class FeedsController(
         feedsService.deleteComment(commentId)
     }
 
-    @PatchMapping("/{feedId}/comments/{commentId}/like")
+    @PatchMapping("/{feedId}/comments/{commentId}/toggle-like")
     @ApiOperation("Toggles like for comment by ID")
     @ApiImplicitParam(
         name = "Authorization",

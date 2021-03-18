@@ -1,14 +1,14 @@
 package com.spaceapps.backend.service
 
 import com.spaceapps.backend.INCORRECT_MESSAGE_ID
-import com.spaceapps.backend.model.dao.chat.ConversationEntity
+import com.spaceapps.backend.model.dao.chat.ChatEntity
 import com.spaceapps.backend.model.dao.chat.MessageEntity
 import com.spaceapps.backend.model.dto.PaginationResponse
-import com.spaceapps.backend.model.dto.chat.ChatConversationRequest
-import com.spaceapps.backend.model.dto.chat.ChatConversationResponse
+import com.spaceapps.backend.model.dto.chat.ChatRequest
+import com.spaceapps.backend.model.dto.chat.ChatResponse
 import com.spaceapps.backend.model.dto.chat.ChatMessageRequest
 import com.spaceapps.backend.model.dto.chat.ChatMessageResponse
-import com.spaceapps.backend.repository.ConversationRepository
+import com.spaceapps.backend.repository.ChatRepository
 import com.spaceapps.backend.repository.MessageRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
@@ -23,7 +23,7 @@ import java.util.*
 @Service
 class ChatService @Autowired constructor(
     private val messageRepository: MessageRepository,
-    private val conversationRepository: ConversationRepository
+    private val chatRepository: ChatRepository
 ) {
 
     private val connections = mutableListOf<WebSocketSession>()
@@ -40,13 +40,13 @@ class ChatService @Autowired constructor(
 
     }
 
-    fun getPaginatedConversations(
+    fun getPaginatedChats(
         search: String,
         pageable: Pageable
-    ): ResponseEntity<PaginationResponse<ChatConversationResponse>> {
-        val page = conversationRepository.findAllByNameContains(search, pageable)
+    ): ResponseEntity<PaginationResponse<ChatResponse>> {
+        val page = chatRepository.findAllByNameContains(search, pageable)
         val paginationResponse = PaginationResponse(
-            data = page.content.map(::mapConversationEntityToResponse),
+            data = page.content.map(::mapChatEntityToResponse),
             total = page.totalElements,
             page = page.number,
             isLast = page.isLast
@@ -54,43 +54,43 @@ class ChatService @Autowired constructor(
         return ResponseEntity.ok(paginationResponse)
     }
 
-    fun createConversation(request: ChatConversationRequest): ResponseEntity<ChatConversationResponse> {
-        val entity = ConversationEntity(
+    fun createChat(request: ChatRequest): ResponseEntity<ChatResponse> {
+        val entity = ChatEntity(
             id = UUID.randomUUID().toString(),
             name = request.name
         )
-        conversationRepository.save(entity)
-        return ResponseEntity.ok(mapConversationEntityToResponse(entity))
+        chatRepository.save(entity)
+        return ResponseEntity.ok(mapChatEntityToResponse(entity))
     }
 
-    fun deleteConversationById(conversationId: String): ResponseEntity<*> {
-        conversationRepository.deleteById(conversationId)
+    fun deleteChatById(chatId: String): ResponseEntity<*> {
+        chatRepository.deleteById(chatId)
         return ResponseEntity.status(HttpStatus.OK).body(null)
     }
 
-    private fun mapConversationEntityToResponse(entity: ConversationEntity): ChatConversationResponse {
-        return ChatConversationResponse(
+    private fun mapChatEntityToResponse(entity: ChatEntity): ChatResponse {
+        return ChatResponse(
             conversationId = entity.id,
             name = entity.name
         )
     }
 
-    fun updateConversationById(conversationId: String, request: ChatConversationRequest): ResponseEntity<*> {
-        val entity = ConversationEntity(
-            id = conversationId,
+    fun updateChatById(chatId: String, request: ChatRequest): ResponseEntity<*> {
+        val entity = ChatEntity(
+            id = chatId,
             name = request.name
         )
         return ResponseEntity.status(HttpStatus.OK)
-            .body(mapConversationEntityToResponse(conversationRepository.save(entity)))
+            .body(mapChatEntityToResponse(chatRepository.save(entity)))
     }
 
-    fun getPaginatedMessagesByConversationId(
-        conversationId: String,
+    fun getPaginatedMessagesByChatId(
+        chatId: String,
         search: String,
         pageable: Pageable
     ): ResponseEntity<*> {
         val page = messageRepository
-            .findAllByConversationIdAndTextContainsOrderByDateTimeDesc(conversationId, search, pageable)
+            .findAllByConversationIdAndTextContainsOrderByDateTimeDesc(chatId, search, pageable)
         val paginationResponse = PaginationResponse(
             data = page.content.map(::mapMessageEntityToResponse),
             total = page.totalElements,
@@ -100,12 +100,12 @@ class ChatService @Autowired constructor(
         return ResponseEntity.ok(paginationResponse)
     }
 
-    fun createMessageByConversationId(conversationId: String, request: ChatMessageRequest): ResponseEntity<*> {
+    fun createMessageByChatId(chatId: String, request: ChatMessageRequest): ResponseEntity<*> {
         val entity = MessageEntity(
             id = UUID.randomUUID().toString(),
             text = request.messageText,
             dateTime = LocalDateTime.now(),
-            conversationId = conversationId
+            conversationId = chatId
         )
         return ResponseEntity.ok(mapMessageEntityToResponse(messageRepository.save(entity)))
     }

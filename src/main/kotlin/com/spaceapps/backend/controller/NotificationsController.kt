@@ -29,13 +29,14 @@ class NotificationsController {
 
     }
 
-    @PatchMapping("/{notificationId}/viewed")
+    @PatchMapping("/{notificationId}/mark-as-viewed")
     @ApiImplicitParam(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiOperation("Marks notification as viewed")
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
     fun markNotificationViewed(
         @PathVariable("notificationId") notificationId: Int,
@@ -51,6 +52,7 @@ class NotificationsController {
         paramType = "header",
         dataTypeClass = String::class
     )
+    @ApiOperation("Deletes notification by ID")
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
     fun deleteNotification(
         @PathVariable("notificationId") notificationId: Int,

@@ -16,6 +16,6 @@ data class MessageEntity(
     var text: String = "",
     @Column(name = "date_time")
     var dateTime: LocalDateTime = LocalDateTime.now(),
-    @Column(name = "conversation_id")
+    @Column(name = "chat_id")
     var conversationId: String = ""
 )
