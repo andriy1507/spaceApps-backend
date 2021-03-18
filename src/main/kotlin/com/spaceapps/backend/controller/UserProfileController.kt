@@ -7,8 +7,8 @@ import io.swagger.annotations.ApiResponses
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@Api(tags = ["Profile"], description = "Profile endpoints")
-@RequestMapping("profile")
+@Api(tags = ["Profiles"], description = "Profiles endpoints")
+@RequestMapping("profiles")
 class UserProfileController {
 
 

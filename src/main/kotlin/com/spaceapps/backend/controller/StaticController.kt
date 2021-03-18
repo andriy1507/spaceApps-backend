@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.io.BufferedInputStream
 
-@Api(value = "Static", tags = ["Static"], description = "Static content endpoints")
+@Api(value = "Static Contents", tags = ["Static Contents"], description = "Static contents endpoints")
 @RestController
-@RequestMapping("static")
+@RequestMapping("static-contents")
 class StaticController {
 
     @GetMapping("/{type}")
