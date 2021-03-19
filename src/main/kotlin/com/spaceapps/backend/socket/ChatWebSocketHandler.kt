@@ -14,17 +14,16 @@ class ChatWebSocketHandler @Autowired constructor(
 ) : AbstractWebSocketHandler() {
 
     override fun afterConnectionEstablished(session: WebSocketSession) {
-        super.afterConnectionEstablished(session)
-        chatService.registerSession(session)
+        session.sendMessage(TextMessage("CONNECTED"))
+//        chatService.registerSession(session)
     }
 
     override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
-        super.handleTextMessage(session, message)
-        chatService.handleSocketMessage(session, message)
+        session.sendMessage(TextMessage("ECHO: $message"))
+//        chatService.handleSocketMessage(session, message)
     }
 
     override fun afterConnectionClosed(session: WebSocketSession, status: CloseStatus) {
-        super.afterConnectionClosed(session, status)
-        chatService.removeSession(session)
+//        chatService.removeSession(session)
     }
 }
