@@ -15,7 +15,7 @@ class ThymeleafConfig {
         templateResolver.prefix = "templates/"
         templateResolver.suffix = ".html"
         templateResolver.setTemplateMode("HTML")
-        templateResolver.characterEncoding = "UTF-8"
+        templateResolver.characterEncoding = "${Charsets.UTF_8}"
         return templateResolver
     }
 
