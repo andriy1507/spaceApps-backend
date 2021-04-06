@@ -133,6 +133,23 @@ class FeedsController(
         return feedsService.toggleFeedLike(feedId, user)
     }
 
+    @PatchMapping("/{feedId}/toggle-saved")
+    @ApiOperation("Toggles saved mode for feed by ID")
+    @ApiImplicitParam(
+        name = "Authorization",
+        value = "Access token",
+        paramType = "header",
+        dataTypeClass = String::class
+    )
+    @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
+    fun toggleFeedSaved(
+        @PathVariable("feedId") feedId: Int,
+        @ApiIgnore auth: Authentication
+    ) {
+
+    }
+
+
     @PostMapping("/{feedId}/comments")
     @ApiOperation("Creates comment for feed by ID")
     @ApiImplicitParam(

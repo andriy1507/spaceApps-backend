@@ -4,5 +4,5 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class FeedItemDto(
     @JsonProperty("text")
-    val text: String
+    val text: String?
 )

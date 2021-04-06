@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 import java.io.BufferedInputStream
 
-@Api(value = "Static Contents", tags = ["Static Contents"], description = "Static contents endpoints")
+@Api(value = "Static", tags = ["Static"], description = "Static endpoints")
 @RestController
-@RequestMapping("static-contents")
+@RequestMapping("static")
 class StaticController {
 
     @GetMapping("/{type}")
@@ -30,7 +30,7 @@ class StaticController {
     fun getStaticContent(
         @PathVariable("type") type: String
     ): ResponseEntity<*> {
-        val resource = ClassPathResource(type)
+        val resource = ClassPathResource("/static/$type")
         return if (resource.exists()) {
             val content = BufferedInputStream(resource.inputStream).reader().readText()
             ResponseEntity.ok(StaticContentResponse(content))
