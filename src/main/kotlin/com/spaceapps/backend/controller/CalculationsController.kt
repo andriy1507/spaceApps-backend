@@ -40,9 +40,12 @@ class CalculationsController {
 
     private fun provideRandomWeights(size: Int): MutableList<Double> {
         val weights = mutableListOf<Double>()
-        for (i in 0 until size) {
+        for (i in 0 until size - 1) {
             weights.add(Random.nextDouble(0.0, 1.0))
         }
+        val sum = weights.sum()
+        if (sum >= 1) return provideRandomWeights(size)
+        weights += (1.0 - weights.sum())
         weights.sort()
         return weights
     }
