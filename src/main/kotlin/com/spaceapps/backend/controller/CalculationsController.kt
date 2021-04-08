@@ -14,7 +14,7 @@ import kotlin.random.Random
 class CalculationsController {
 
     data class CalcRequest(
-        val actualData: List<Int>,
+        val actualData: List<Double>,
         val roundsCount: Int
     )
 
@@ -26,9 +26,7 @@ class CalculationsController {
         for (r in 0..request.roundsCount) {
             var newResult = 0.0
             val newWeights = provideRandomWeights(request.actualData.size - 1)
-            newWeights.forEachIndexed { index, d ->
-                newResult += request.actualData[index] * d
-            }
+            newWeights.forEachIndexed { index, d -> newResult += request.actualData[index] * d }
             if (abs(actualResult-lastCalcRequest) > abs(actualResult-newResult)) {
                 lastCalcRequest = newResult
                 myWeights.clear()
@@ -40,9 +38,7 @@ class CalculationsController {
 
     private fun provideRandomWeights(size: Int): MutableList<Double> {
         val weights = mutableListOf<Double>()
-        for (i in 0 until size - 1) {
-            weights.add(Random.nextDouble(0.0, 1.0))
-        }
+        for (i in 0 until size - 1) weights.add(Random.nextDouble(0.0, 1.0))
         val sum = weights.sum()
         if (sum >= 1) return provideRandomWeights(size)
         weights += (1.0 - weights.sum())
