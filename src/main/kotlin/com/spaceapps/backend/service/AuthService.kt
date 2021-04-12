@@ -51,14 +51,11 @@ class AuthService @Autowired constructor(
     }
 
     fun refreshToken(request: RefreshTokenRequest): ResponseEntity<*> {
-        return ResponseEntity.ok(
-            AuthorizationTokenResponse(
-                "authorization token",
-                LocalDateTime.now(),
-                "refresh token",
-                LocalDateTime.now()
-            )
-        )
+        val userName = JsonWebTokenUtils.validateRefreshToken(request.refreshToken)
+        userName ?: return ResponseEntity.badRequest().body(INVALID_REFRESH_TOKEN)
+        val userEntity = userRepository.getByEmail(userName)
+        userEntity ?: return ResponseEntity.badRequest().body(USER_DOES_NOT_EXISTS)
+        return ResponseEntity.ok(JsonWebTokenUtils.generateAuthTokenResponse(userEntity, request.device))
     }
 
     fun googleSignIn(request: SocialSignInRequest): ResponseEntity<*> {

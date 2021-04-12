@@ -38,6 +38,18 @@ object JsonWebTokenUtils {
         return claims.body.get(USER_NAME, String::class.java)
     }
 
+    @Throws(MissingClaimException::class, IncorrectClaimException::class)
+    fun validateRefreshToken(token: String):String? {
+        val parser = Jwts.parserBuilder()
+            .setSigningKey(Keys.hmacShaKeyFor(SIGN_SECRET))
+            .deserializeJsonWith(JacksonDeserializer())
+            .build()
+        val claims = parser.parseClaimsJws(token)
+        if (claims.body.expiration.before(Date())) return null
+        if (claims.header[TOKEN_TYPE] != TOKEN_TYPE_REFRESH) return null
+        return claims.body.get(USER_NAME, String::class.java)
+    }
+
     fun generateAuthTokenResponse(user: UserEntity, device: DeviceRequest): AuthorizationTokenResponse {
         val now = LocalDateTime.now()
         val jwtBuilder = Jwts.builder()
@@ -50,7 +62,7 @@ object JsonWebTokenUtils {
                     PLATFORM to device.platform,
                     USER_NAME to user.email,
                     USER_ID to user.id,
-                    USER_TYPE to user
+                    USER_TYPE to user.type
                 )
             )
             .setIssuedAt(Date.from(now.toInstant(ZoneOffset.UTC)))
