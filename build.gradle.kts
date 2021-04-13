@@ -44,6 +44,11 @@ dependencies {
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.2")
 //    FCM Admin
     implementation("com.google.firebase:firebase-admin:6.8.1")
+//    Jsoup
+    implementation("org.jsoup:jsoup:1.13.1")
+//    ZXing
+    implementation("com.google.zxing:core:3.4.1")
+    implementation("com.google.zxing:javase:3.4.1")
 }
 
 

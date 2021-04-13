@@ -28,6 +28,7 @@ class SecurityConfig @Autowired constructor(
             .antMatchers("/static/**").permitAll()
             .antMatchers("/calc/**").permitAll()
             .antMatchers("/calc").permitAll()
+            .antMatchers("/tools/**").permitAll()
             .antMatchers(
                 "/swagger-ui/**",
                 "/v2/api-docs",
