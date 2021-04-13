@@ -21,7 +21,8 @@ class FeedsService @Autowired constructor(
     private val feedsRepository: FeedsRepository,
     private val commentLikesRepository: CommentLikesRepository,
     private val feedLikesRepository: FeedLikesRepository,
-    private val feedCommentsRepository: FeedCommentsRepository
+    private val feedCommentsRepository: FeedCommentsRepository,
+    private val pushNotificationService: PushNotificationService
 ) {
 
     fun getSingleFeed(feedId: Int, user: ApplicationUserDetails): ResponseEntity<*> {
@@ -52,6 +53,7 @@ class FeedsService @Autowired constructor(
                 items = request.items.map { FeedItemEntity(text = it.text) }.toMutableList()
             )
         )
+        pushNotificationService.sendNewPostNotification()
         return mapFeedEntityToFullResponse(entity, user.userId)
     }
 

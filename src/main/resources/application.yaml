@@ -24,3 +24,6 @@ springfox:
   documentation:
     swagger:
       use-model-v3: false
+firebase:
+  service-account-file: 'spaceapps-firebase-adminsdk.json'
+  database-url: 'https://spaceapps-5465e.firebaseio.com'
