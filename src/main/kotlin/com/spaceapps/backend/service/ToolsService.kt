@@ -4,6 +4,7 @@ import com.google.zxing.BarcodeFormat
 import com.google.zxing.client.j2se.MatrixToImageWriter
 import com.google.zxing.qrcode.QRCodeWriter
 import com.spaceapps.backend.model.dto.tools.MetaDataResponse
+import com.spaceapps.backend.model.dto.tools.QrCodeResponse
 import org.jsoup.Jsoup
 import org.jsoup.parser.Parser
 import org.springframework.stereotype.Service
@@ -23,12 +24,16 @@ class ToolsService {
         return MetaDataResponse(name, description, url, image)
     }
 
-    fun generateQrCode(data: String, width: Int, height: Int): String {
+    fun generateQrCode(data: String, width: Int, height: Int): QrCodeResponse {
         val bitMatrix = QRCodeWriter().encode(data, BarcodeFormat.QR_CODE, width, height)
         val outputStream = ByteArrayOutputStream()
         val image = MatrixToImageWriter.toBufferedImage(bitMatrix)
         ImageIO.write(image, "png", outputStream)
-        return Base64.getEncoder().encodeToString(outputStream.toByteArray())
+        return QrCodeResponse(
+            encodedImage = Base64.getEncoder().encodeToString(outputStream.toByteArray()),
+            width = width,
+            height = height
+        )
     }
 
 }
