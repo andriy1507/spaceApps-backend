@@ -9,11 +9,14 @@ import com.spaceapps.backend.proxy.FacebookSignInProxy
 import com.spaceapps.backend.proxy.GoogleSignInProxy
 import com.spaceapps.backend.repository.DevicesRepository
 import com.spaceapps.backend.repository.UserRepository
+import com.spaceapps.backend.utils.ApplicationUserDetails
 import com.spaceapps.backend.utils.JsonWebTokenUtils
 import com.spaceapps.backend.utils.isEmail
 import com.spaceapps.backend.utils.isPassword
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime
@@ -94,21 +97,21 @@ class AuthService @Autowired constructor(
 
     fun appleSignIn(request: SocialSignInRequest): ResponseEntity<*> {
         appleSignInProxy.getAppleUserDetails(accessToken = request.accessToken, clientId = "", clientSecret = "")
-        return ResponseEntity.ok(
-            AuthorizationTokenResponse(
-                "authorization token",
-                LocalDateTime.now(),
-                "refresh token",
-                LocalDateTime.now()
-            )
-        )
+        return ResponseEntity.status(HttpStatus.NOT_IMPLEMENTED).body(null)
     }
 
-    fun addDevice(request: DeviceRequest): ResponseEntity<*> {
+    fun addDevice(request: DeviceRequest, user: ApplicationUserDetails): ResponseEntity<*> {
+        val device = DeviceEntity(token = request.token, platform = request.platform.name)
+        val updatedUser = userRepository.getByEmail(user.username)!!
+        updatedUser.devices.add(deviceRepository.save(device))
+        userRepository.save(updatedUser)
         return ResponseEntity.ok(Unit)
     }
 
-    fun logOut(deviceToken: String): ResponseEntity<*> {
+    fun logOut(deviceToken: String, user: ApplicationUserDetails): ResponseEntity<*> {
+        val device = deviceRepository.findByToken(deviceToken) ?: return ResponseEntity.badRequest().body(INVALID_DEVICE_TOKEN)
+        userRepository.getByEmail(user.username)!!.devices.remove(device)
+        deviceRepository.delete(device)
         return ResponseEntity.ok(Unit)
     }
 

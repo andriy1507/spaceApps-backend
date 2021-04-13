@@ -2,10 +2,13 @@ package com.spaceapps.backend.controller
 
 import com.spaceapps.backend.model.dto.auth.*
 import com.spaceapps.backend.service.AuthService
+import com.spaceapps.backend.utils.ApplicationUserDetails
 import io.swagger.annotations.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
+import springfox.documentation.annotations.ApiIgnore
 
 @RestController
 @Api(tags = ["Authorization"], description = "Authorization endpoints")
@@ -83,11 +86,16 @@ class AuthController @Autowired constructor(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class
+        dataTypeClass = String::class,
+        required = true
     )
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
-    fun addDevice(@RequestBody request: DeviceRequest): ResponseEntity<*> {
-        return authService.addDevice(request)
+    fun addDevice(
+        @RequestBody request: DeviceRequest,
+        @ApiIgnore auth: Authentication
+    ): ResponseEntity<*> {
+        val user = auth.principal as ApplicationUserDetails
+        return authService.addDevice(request, user)
     }
 
     @DeleteMapping("/log-out/{deviceToken}")
@@ -96,10 +104,15 @@ class AuthController @Autowired constructor(
         name = "Authorization",
         value = "Access token",
         paramType = "header",
-        dataTypeClass = String::class
+        dataTypeClass = String::class,
+        required = true
     )
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
-    fun logOut(@PathVariable("deviceToken") deviceToken: String): ResponseEntity<*> {
-        return authService.logOut(deviceToken)
+    fun logOut(
+        @PathVariable("deviceToken") deviceToken: String,
+        @ApiIgnore auth: Authentication
+    ): ResponseEntity<*> {
+        val user = auth.principal as ApplicationUserDetails
+        return authService.logOut(deviceToken, user)
     }
 }
