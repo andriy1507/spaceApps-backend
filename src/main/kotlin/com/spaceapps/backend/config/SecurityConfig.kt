@@ -22,21 +22,13 @@ class SecurityConfig @Autowired constructor(
         http.cors().and().csrf().disable()
             .addFilterBefore(authorizationTokenFilter, UsernamePasswordAuthenticationFilter::class.java)
             .authorizeRequests()
-            .antMatchers("/auth/**").permitAll()
-            .antMatchers("/chat-socket").permitAll()
-            .antMatchers("/test").permitAll()
-            .antMatchers("/static/**").permitAll()
-            .antMatchers("/calc/**").permitAll()
-            .antMatchers("/calc").permitAll()
-            .antMatchers("/tools/**").permitAll()
-            .antMatchers(
-                "/swagger-ui/**",
-                "/v2/api-docs",
-                "/swagger-resources/**",
-                "/webjars/**"
-            ).permitAll()
-            .antMatchers("/actuator/**").permitAll()
-            .anyRequest().authenticated()
+            .antMatchers("/feeds", "/feeds/**").authenticated()
+            .antMatchers("/chats", "/chats/**").authenticated()
+            .antMatchers("/notifications", "/notifications/**").authenticated()
+            .antMatchers("/settings/**").authenticated()
+            .antMatchers("/uploads/**").authenticated()
+            .antMatchers("/profiles", "/profiles/**").authenticated()
+            .anyRequest().permitAll()
             .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             .and().exceptionHandling().authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
     }
