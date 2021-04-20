@@ -1,11 +1,7 @@
 package com.spaceapps.backend.controller
 
 import com.spaceapps.backend.model.dto.auth.*
-import com.spaceapps.backend.service.AuthService
-import com.spaceapps.backend.utils.ApplicationUserDetails
 import io.swagger.annotations.*
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 import springfox.documentation.annotations.ApiIgnore
@@ -13,72 +9,52 @@ import springfox.documentation.annotations.ApiIgnore
 @RestController
 @Api(tags = ["Authorization"], description = "Authorization endpoints")
 @RequestMapping("auth")
-class AuthController @Autowired constructor(
-    private val authService: AuthService
-) {
+class AuthController {
 
     @PostMapping("/sign-in")
     @ApiOperation("Generates access token and refresh token")
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = AuthorizationTokenResponse::class))
-    fun signIn(@RequestBody request: AuthorizationRequest): ResponseEntity<*> {
-        return authService.signIn(request)
-    }
+    fun signIn(@RequestBody request: AuthorizationRequest) = Unit
 
     @PostMapping("/sign-up")
     @ApiOperation("Creates new user. Generates access token and refresh token")
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = AuthorizationTokenResponse::class))
-    fun signUp(@RequestBody request: AuthorizationRequest): ResponseEntity<*> {
-        return authService.signUp(request)
-    }
+    fun signUp(@RequestBody request: AuthorizationRequest) = Unit
 
     @PostMapping("/refresh-token")
     @ApiOperation("Refreshes access token and refresh token")
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = AuthorizationTokenResponse::class))
-    fun refreshToken(@RequestBody request: RefreshTokenRequest): ResponseEntity<*> {
-        return authService.refreshToken(request)
-    }
+    fun refreshToken(@RequestBody request: RefreshTokenRequest) = Unit
 
     @PostMapping("/google-sign-in")
     @ApiOperation("Generates access token and refresh token by google access token")
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = AuthorizationTokenResponse::class))
-    fun googleSignIn(@RequestBody request: SocialSignInRequest): ResponseEntity<*> {
-        return authService.googleSignIn(request)
-    }
+    fun googleSignIn(@RequestBody request: SocialSignInRequest) = Unit
 
     @PostMapping("/facebook-sign-in")
     @ApiOperation("Generates access token and refresh token by facebook access token")
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = AuthorizationTokenResponse::class))
-    fun facebookSignIn(@RequestBody request: SocialSignInRequest): ResponseEntity<*> {
-        return authService.facebookSignIn(request)
-    }
+    fun facebookSignIn(@RequestBody request: SocialSignInRequest) = Unit
 
     @PostMapping("/apple-sign-in")
     @ApiOperation("Generates access token and refresh token by apple access token")
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = AuthorizationTokenResponse::class))
-    fun appleSignIn(@RequestBody request: SocialSignInRequest): ResponseEntity<*> {
-        return authService.appleSignIn(request)
-    }
+    fun appleSignIn(@RequestBody request: SocialSignInRequest) = Unit
 
     @PostMapping("/send-reset-token")
     @ApiOperation("Sends reset token to email")
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
-    fun sendResetToken(@RequestBody request: SendResetTokenRequest): ResponseEntity<*> {
-        return authService.sendResetToken(request)
-    }
+    fun sendResetToken(@RequestBody request: SendResetTokenRequest) = Unit
 
     @PostMapping("/verify-reset-token")
     @ApiOperation("Verifies reset token")
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
-    fun verifyResetToken(@RequestBody request: VerifyResetTokenRequest): ResponseEntity<*> {
-        return authService.verifyResetToken(request)
-    }
+    fun verifyResetToken(@RequestBody request: VerifyResetTokenRequest) = Unit
 
     @PutMapping("/reset-password")
     @ApiOperation("Sets new password by received code")
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
-    fun resetPassword(@RequestBody request: ResetPasswordRequest): ResponseEntity<*> {
-        return authService.resetPassword(request)
-    }
+    fun resetPassword(@RequestBody request: ResetPasswordRequest) = Unit
 
     @PostMapping("/add-device")
     @ApiOperation("Adds new user device")
@@ -93,10 +69,7 @@ class AuthController @Autowired constructor(
     fun addDevice(
         @RequestBody request: DeviceRequest,
         @ApiIgnore auth: Authentication
-    ): ResponseEntity<*> {
-        val user = auth.principal as ApplicationUserDetails
-        return authService.addDevice(request, user)
-    }
+    ) = Unit
 
     @DeleteMapping("/log-out/{deviceToken}")
     @ApiOperation("Removes user device")
@@ -111,8 +84,5 @@ class AuthController @Autowired constructor(
     fun logOut(
         @PathVariable("deviceToken") deviceToken: String,
         @ApiIgnore auth: Authentication
-    ): ResponseEntity<*> {
-        val user = auth.principal as ApplicationUserDetails
-        return authService.logOut(deviceToken, user)
-    }
+    ) = Unit
 }

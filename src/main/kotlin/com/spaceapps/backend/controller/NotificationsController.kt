@@ -25,9 +25,7 @@ class NotificationsController {
         @PageableDefault(size = 20, page = 0)
         pageable: Pageable,
         @ApiIgnore auth: Authentication
-    ) {
-
-    }
+    ) = Unit
 
     @PatchMapping("/{notificationId}/mark-as-viewed")
     @ApiImplicitParam(
@@ -41,9 +39,7 @@ class NotificationsController {
     fun markNotificationViewed(
         @PathVariable("notificationId") notificationId: Int,
         @ApiIgnore auth: Authentication
-    ) {
-
-    }
+    ) = Unit
 
     @DeleteMapping("/{notificationId}")
     @ApiImplicitParam(
@@ -57,7 +53,5 @@ class NotificationsController {
     fun deleteNotification(
         @PathVariable("notificationId") notificationId: Int,
         @ApiIgnore auth: Authentication
-    ) {
-
-    }
+    ) = Unit
 }

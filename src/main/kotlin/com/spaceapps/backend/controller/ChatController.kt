@@ -6,20 +6,16 @@ import com.spaceapps.backend.model.dto.chat.ChatRequest
 import com.spaceapps.backend.model.dto.chat.ChatResponse
 import com.spaceapps.backend.model.dto.pagination.ConversationsPaginationResponse
 import com.spaceapps.backend.model.dto.pagination.MessagesPaginationResponse
-import com.spaceapps.backend.service.ChatService
 import io.swagger.annotations.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.data.domain.Pageable
 import org.springframework.data.web.PageableDefault
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
 @Api(tags = ["Chats"], description = "Chats endpoints")
 @RequestMapping("chats")
-class ChatController @Autowired constructor(
-    private val chatService: ChatService
-) {
+class ChatController @Autowired constructor() {
 
     @GetMapping
     @ApiOperation("Returns paginated chats")
@@ -37,9 +33,7 @@ class ChatController @Autowired constructor(
             required = false,
             defaultValue = ""
         ) search: String
-    ): ResponseEntity<*> {
-        return chatService.getPaginatedChats(search, pageable)
-    }
+    ) = Unit
 
     @PostMapping
     @ApiOperation("Creates chat", response = ChatResponse::class)
@@ -50,9 +44,7 @@ class ChatController @Autowired constructor(
         dataTypeClass = String::class
     )
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = ChatResponse::class))
-    fun createChat(@RequestBody request: ChatRequest): ResponseEntity<*> {
-        return chatService.createChat(request)
-    }
+    fun createChat(@RequestBody request: ChatRequest) = Unit
 
     @DeleteMapping("/{chatId}")
     @ApiOperation("Deletes chat by ID")
@@ -63,9 +55,7 @@ class ChatController @Autowired constructor(
         dataTypeClass = String::class
     )
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
-    fun deleteChat(@PathVariable("chatId") chatId: String): ResponseEntity<*> {
-        return chatService.deleteChatById(chatId)
-    }
+    fun deleteChat(@PathVariable("chatId") chatId: String) = Unit
 
     @PutMapping("/{chatId}")
     @ApiOperation("Updates chat")
@@ -79,9 +69,7 @@ class ChatController @Autowired constructor(
     fun updateChat(
         @PathVariable("chatId") chatId: String,
         @RequestBody request: ChatRequest
-    ): ResponseEntity<*> {
-        return chatService.updateChatById(chatId, request)
-    }
+    ) = Unit
 
     @GetMapping("/{chatId}/messages")
     @ApiOperation("Returns paginated list of messages by chat ID")
@@ -100,9 +88,7 @@ class ChatController @Autowired constructor(
             required = false,
             defaultValue = ""
         ) search: String
-    ): ResponseEntity<*> {
-        return chatService.getPaginatedMessagesByChatId(chatId, search, pageable)
-    }
+    ) = Unit
 
     @PostMapping("/{chatId}/messages")
     @ApiOperation("Creates new message by chat ID")
@@ -116,9 +102,7 @@ class ChatController @Autowired constructor(
     fun createChatMessage(
         @PathVariable("chatId") chatId: String,
         @RequestBody request: ChatMessageRequest
-    ): ResponseEntity<*> {
-        return chatService.createMessageByChatId(chatId, request)
-    }
+    ) = Unit
 
     @DeleteMapping("/{chatId}/messages/{messageId}")
     @ApiOperation("Deletes message by message ID")
@@ -132,9 +116,7 @@ class ChatController @Autowired constructor(
     fun deleteChatMessage(
         @PathVariable("messageId") messageId: String,
         @PathVariable("chatId") chatId: String
-    ): ResponseEntity<*> {
-        return chatService.deleteMessageById(messageId)
-    }
+    ) = Unit
 
     @PutMapping("/{chatId}/messages/{messageId}")
     @ApiOperation("Updates message by message ID")
@@ -149,7 +131,5 @@ class ChatController @Autowired constructor(
         @PathVariable("messageId") messageId: String,
         @RequestBody request: ChatMessageRequest,
         @PathVariable("chatId") chatId: String
-    ): ResponseEntity<*> {
-        return chatService.updateMessageById(messageId, request)
-    }
+    ) = Unit
 }

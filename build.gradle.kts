@@ -30,6 +30,9 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.7.1")
+    testImplementation("com.google.truth:truth:1.1.2")
 //    Spring Cloud
     implementation("org.springframework.cloud:spring-cloud-starter-openfeign")
 //    PostgreSQL
@@ -42,7 +45,7 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-api:0.11.2")
     implementation("io.jsonwebtoken:jjwt-jackson:0.11.2")
     runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.2")
-//    FCM Admin
+//    Firebase Admin
     implementation("com.google.firebase:firebase-admin:6.8.1")
 //    Jsoup
     implementation("org.jsoup:jsoup:1.13.1")
