@@ -1,20 +1,15 @@
 package com.spaceapps.backend.controller
 
 import com.spaceapps.backend.model.dto.uploads.UploadResponse
-import com.spaceapps.backend.model.dto.uploads.UploadType
-import com.spaceapps.backend.service.UploadsService
 import io.swagger.annotations.*
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 
 @RestController
 @Api(tags = ["Uploads"], description = "Uploads endpoints")
 @RequestMapping("uploads")
-class UploadsController @Autowired constructor(
-    private val uploadsService: UploadsService
-) {
+class UploadsController @Autowired constructor() {
 
     @GetMapping("/{fileName}")
     @ApiOperation("Returns file by name")
@@ -25,9 +20,7 @@ class UploadsController @Autowired constructor(
         dataTypeClass = String::class
     )
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
-    fun getFile(@PathVariable("fileName") fileName: String): ResponseEntity<*> {
-        return uploadsService.getFile(fileName)
-    }
+    fun getFile(@PathVariable("fileName") fileName: String) = Unit
 
     @PostMapping("/file")
     @ApiOperation("Uploads file")
@@ -38,9 +31,7 @@ class UploadsController @Autowired constructor(
         dataTypeClass = String::class
     )
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = UploadResponse::class))
-    fun uploadFile(@RequestPart(required = true) file: MultipartFile): ResponseEntity<*> {
-        return uploadsService.saveFile(file, UploadType.File)
-    }
+    fun uploadFile(@RequestPart(required = true) file: MultipartFile) = Unit
 
     @PostMapping("/image")
     @ApiOperation("Uploads image")
@@ -51,9 +42,7 @@ class UploadsController @Autowired constructor(
         dataTypeClass = String::class
     )
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = UploadResponse::class))
-    fun uploadImage(@RequestPart(required = true) file: MultipartFile): ResponseEntity<*> {
-        return uploadsService.saveFile(file, UploadType.Image)
-    }
+    fun uploadImage(@RequestPart(required = true) file: MultipartFile) = Unit
 
     @PostMapping("/video")
     @ApiOperation("Uploads video")
@@ -64,9 +53,7 @@ class UploadsController @Autowired constructor(
         dataTypeClass = String::class
     )
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = UploadResponse::class))
-    fun uploadVideo(@RequestPart(required = true) file: MultipartFile): ResponseEntity<*> {
-        return uploadsService.saveFile(file, UploadType.Video)
-    }
+    fun uploadVideo(@RequestPart(required = true) file: MultipartFile) = Unit
 
     @PostMapping("/audio")
     @ApiOperation("Uploads audio")
@@ -77,9 +64,7 @@ class UploadsController @Autowired constructor(
         dataTypeClass = String::class
     )
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = UploadResponse::class))
-    fun uploadAudio(@RequestPart(required = true) file: MultipartFile): ResponseEntity<*> {
-        return uploadsService.saveFile(file, UploadType.Audio)
-    }
+    fun uploadAudio(@RequestPart(required = true) file: MultipartFile) = Unit
 
     @DeleteMapping("/{fileName}")
     @ApiOperation("Deletes file by name")
@@ -90,7 +75,5 @@ class UploadsController @Autowired constructor(
         dataTypeClass = String::class
     )
     @ApiResponses(ApiResponse(code = 200, message = "Success", response = Unit::class))
-    fun deleteFile(@PathVariable("fileName") fileName: String): ResponseEntity<*> {
-        return uploadsService.deleteFile(fileName)
-    }
+    fun deleteFile(@PathVariable("fileName") fileName: String) = Unit
 }

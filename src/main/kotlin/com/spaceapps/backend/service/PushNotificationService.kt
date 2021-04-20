@@ -5,7 +5,6 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.messaging.*
 import com.spaceapps.backend.config.properties.FirebaseProperties
-import com.spaceapps.backend.repository.DevicesRepository
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.io.FileInputStream
@@ -13,8 +12,7 @@ import javax.annotation.PostConstruct
 
 @Service
 class PushNotificationService @Autowired constructor(
-    private val properties: FirebaseProperties,
-    private val devicesRepository: DevicesRepository
+    private val properties: FirebaseProperties
 ) {
 
     private lateinit var messaging: FirebaseMessaging
@@ -34,7 +32,7 @@ class PushNotificationService @Autowired constructor(
     }
 
     fun sendNewPostNotification() {
-        val deviceTokens = devicesRepository.findAll().map { it.token }
+        val deviceTokens = emptyList<String>()
         val data = buildMessageData("New post available","Open application to see new post", null)
         val multicastMessage = MulticastMessage.builder()
             .addAllTokens(deviceTokens)
