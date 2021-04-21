@@ -16,5 +16,4 @@ class BackendApplicationTests {
     fun contextLoads() {
         assertThat(authController).isNotNull()
     }
-
 }

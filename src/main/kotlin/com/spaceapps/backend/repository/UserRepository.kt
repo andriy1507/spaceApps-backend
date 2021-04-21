@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository
 @Repository
 interface UserRepository : CrudRepository<UserEntity, Int> {
 
+    fun existsByEmail(email: String): Boolean
+
     fun getByEmail(email: String): UserEntity?
 
 }

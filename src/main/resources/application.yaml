@@ -1,4 +1,6 @@
-
+server:
+  error:
+    include-message: always
 spring:
   jpa:
     hibernate:

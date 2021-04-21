@@ -12,5 +12,12 @@ data class DeviceEntity(
     @Column(name = "device_token")
     var token: String = "",
     @Column(name = "device_platform")
-    var platform: String = ""
-)
+    var platform: Platform = Platform.Unspecified
+) {
+
+    enum class Platform {
+        Android,
+        Ios,
+        Unspecified
+    }
+}

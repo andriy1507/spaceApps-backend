@@ -39,6 +39,5 @@ data class UserEntity(
     var zipCode: String? = null
 ) {
     @OneToMany(cascade = [CascadeType.ALL], fetch = FetchType.EAGER)
-    @JoinColumn(name = "device_user_id")
-    val devices: MutableList<DeviceEntity> = mutableListOf()
+    val devices: MutableSet<DeviceEntity> = mutableSetOf()
 }
