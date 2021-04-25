@@ -1,6 +1,7 @@
-name: Spring Boot CI
+name: Spring Boot CD
 
 on:
+#  TODO Change to push
   pull_request:
     branches: [ master ]
 
@@ -32,7 +33,5 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
           restore-keys: |
             ${{ runner.os }}-gradle-
-      - name: Run tests
-        run: ./gradlew test
       - name: Build with Gradle
         run: ./gradlew build
