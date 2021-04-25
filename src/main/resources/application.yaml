@@ -9,9 +9,9 @@ spring:
     database-platform: 'org.hibernate.dialect.PostgreSQLDialect'
     show-sql: true
   datasource:
-    url: 'jdbc:postgresql://aaxld5u1ejav8s.cet8g3oroazx.us-east-2.rds.amazonaws.com:5432/aaxld5u1ejav8s'
-    username: 'citilsprqeawyr'
-    password: '85a60dfa388dc909f5f5bbb5df0bde6cde19bf625cce893f258f213ac30da967'
+    url: 'jdbc:postgresql://database-1.cet8g3oroazx.us-east-2.rds.amazonaws.com:5432/postgres'
+    username: 'postgres'
+    password: '15ab0c7de1f9gh98'
   servlet:
     multipart:
       max-file-size: 150MB
