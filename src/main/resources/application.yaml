@@ -1,7 +1,7 @@
 server:
   error:
     include-message: always
-  port: 8080
+  port: 5000
 spring:
   jpa:
     hibernate:
@@ -9,7 +9,7 @@ spring:
     database-platform: 'org.hibernate.dialect.PostgreSQLDialect'
     show-sql: true
   datasource:
-    url: 'jdbc:postgresql:/ec2-52-30-161-203.eu-west-1.compute.amazonaws.com:5432/d31necqj0jdkfd'
+    url: 'jdbc:postgresql://ec2-52-30-161-203.eu-west-1.compute.amazonaws.com:5432/d31necqj0jdkfd'
     username: 'citilsprqeawyr'
     password: '85a60dfa388dc909f5f5bbb5df0bde6cde19bf625cce893f258f213ac30da967'
   servlet:
