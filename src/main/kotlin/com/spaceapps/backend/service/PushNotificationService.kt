@@ -1,9 +1,13 @@
 package com.spaceapps.backend.service
 
+import com.google.auth.oauth2.GoogleCredentials
+import com.google.firebase.FirebaseApp
+import com.google.firebase.FirebaseOptions
 import com.google.firebase.messaging.*
 import com.spaceapps.backend.config.properties.FirebaseProperties
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.io.FileInputStream
 import javax.annotation.PostConstruct
 
 @Service
@@ -22,13 +26,13 @@ class PushNotificationService @Autowired constructor(
 
     @PostConstruct
     fun initialize() {
-//        val serviceAccount = FileInputStream(properties.serviceAccountFile)
-//        val options: FirebaseOptions = FirebaseOptions.builder()
-//            .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-//            .setDatabaseUrl(properties.databaseUrl)
-//            .build()
-//        val app = FirebaseApp.initializeApp(options)
-//        messaging = FirebaseMessaging.getInstance(app)
+        val serviceAccount = FileInputStream(properties.serviceAccountFile)
+        val options: FirebaseOptions = FirebaseOptions.builder()
+            .setCredentials(GoogleCredentials.fromStream(serviceAccount))
+            .setDatabaseUrl(properties.databaseUrl)
+            .build()
+        val app = FirebaseApp.initializeApp(options)
+        messaging = FirebaseMessaging.getInstance(app)
     }
 
     private fun buildMessageData(
